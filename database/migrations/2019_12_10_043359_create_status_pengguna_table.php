@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransaksiParkirTable extends Migration
+class CreateStatusPenggunaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateTransaksiParkirTable extends Migration
      */
     public function up()
     {
-        Schema::create('transaksi_parkir', function (Blueprint $table) {
-            $table->bigIncrements('idTp');
-            $table->bigInteger('idMahasiswa');
-            $table->boolean('status');
+        Schema::create('status_pengguna', function (Blueprint $table) {
+            $table->bigIncrements('idStatusPengguna');
+            $table->string('nama_status_pengguna');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreateTransaksiParkirTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transaksi_parkir');
+        Schema::dropIfExists('status_pengguna');
     }
 }

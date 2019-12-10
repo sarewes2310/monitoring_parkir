@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePegawaiTable extends Migration
+class CreateTempatParkirTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreatePegawaiTable extends Migration
      */
     public function up()
     {
-        Schema::create('pegawai', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('idFakultas');
-            $table->string('cid');
-            $table->string('nip');
-            $table->string('nama_pegawai');
+        Schema::create('tempat_parkir', function (Blueprint $table) {
+            $table->bigIncrements('idTempatParkir');
+            $table->bigInteger('idAlatParkir');
+            $table->string('nama_tempat_parkir');
             $table->string('alamat');
-            $table->string('foto');
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ class CreatePegawaiTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pegawai');
+        Schema::dropIfExists('tempat_parkir');
     }
 }
