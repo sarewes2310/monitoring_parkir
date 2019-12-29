@@ -1,0 +1,1 @@
+$(menu_bar_active).addClass('myactive');

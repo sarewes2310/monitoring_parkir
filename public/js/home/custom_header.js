@@ -1,0 +1,1 @@
+var menu_bar_active = '';

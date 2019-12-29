@@ -1,0 +1,45 @@
+body{
+    overflow-x: hidden;
+}
+.header-title{
+    min-width: 80%;
+}
+.pad-card{
+    padding-left: 5%;
+    padding-right: 5%;
+}
+.footer {
+    left: 0;
+    bottom: 0;
+    background-color: #1b1f3b !important;
+    color: white;
+    text-align: center;
+    padding-bottom: 1%;
+    padding-right: 4%;
+    padding-left: 4%;
+    padding-top: 4%;
+}
+#mapid { 
+    height: 500px;
+}
+.title-page {
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+.form-cek-live {
+    width: 30%;
+    margin: auto;
+}
+#live_cam_row {
+    min-height: 600px;
+}
+
+.logo-navbar {
+    width: 9rem;
+}
+
+.btn-grad-purple {
+    background-image: linear-gradient( 135deg, #43CBFF 10%, #9708CC 100%) !important;
+    color: white !important;
+    border-color: inherit;
+}

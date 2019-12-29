@@ -1,0 +1,89 @@
+body {
+    overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+    min-height: 100vh;
+    margin-left: -15rem;
+    -webkit-transition: margin .25s ease-out;
+    -moz-transition: margin .25s ease-out;
+    -o-transition: margin .25s ease-out;
+    transition: margin .25s ease-out;
+}
+
+#sidebar-wrapper .sidebar-heading {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
+}
+
+#sidebar-wrapper .list-group {
+    width: 15rem;
+}
+
+#page-content-wrapper {
+    min-width: 100vw;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    margin-left: 0;
+}
+
+.logo-navbar {
+    width: 9rem;
+}
+
+.footer {
+    left: 0;
+    bottom: 0;
+    background-color: #1b1f3b !important;
+    color: white;
+    text-align: center;
+    padding-bottom: 1%;
+    padding-right: 4%;
+    padding-left: 4%;
+    padding-top: 4%;
+}
+
+#admin_row {
+    padding-top: 2rem;
+}
+
+.myactive {
+    background-image: linear-gradient( 135deg, #43CBFF 10%, #9708CC 100%) !important;
+    color: white;
+}
+
+.card-grad-blue {
+    background-image: linear-gradient( 135deg, #3C8CE7 10%, #00EAFF 100%) !important;
+    color: white !important;
+    border-color: inherit;
+}
+
+.card-grad-red {
+    background-image: linear-gradient( 235deg, #E80505 10%, #FDD819 100%) !important;
+    color: white !important;
+    border-color: inherit;
+}
+
+.tambah-data {
+    padding-bottom: 0.5rem;
+}
+
+.mon-f-badge {
+    font-size: 1rem;
+}
+
+@media (min-width: 768px) {
+    #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    #page-content-wrapper {
+        min-width: 0;
+        width: 100%;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: -15rem;
+    }
+}

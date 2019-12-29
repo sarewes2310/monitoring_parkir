@@ -17,7 +17,7 @@ class CreateParkirTable extends Migration
             $table->bigIncrements('idParkir');
             $table->bigInteger('idPengguna');
             $table->bigInteger('idTempatParkir');
-            $table->smallInteger('mode');
+            $table->smallInteger('status');
             $table->timestamps();
         });
     }
