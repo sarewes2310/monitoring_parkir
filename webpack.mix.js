@@ -11,8 +11,5 @@ const mix = require('laravel-mix');
  |
  */
 
-//mix.js('resources/js/app.js', 'public/js')
-//    .sass('resources/sass/app.scss', 'public/css');
-/*mix.scripts([
-    'node_modules/zepto/dist/zepto.min.js'
-],'public/js/app.js');*/
+mix.js('resources/js/app.js', 'public/js')
+   .sass('resources/sass/app.scss', 'public/css');

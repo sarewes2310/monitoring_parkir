@@ -15,12 +15,12 @@ class CreatePenggunaTable extends Migration
     {
         Schema::create('pengguna', function (Blueprint $table) {
             $table->bigIncrements('idPengguna');
-            $table->bigInteger('idFakultas');
             $table->bigInteger('idStatusPengguna');
             $table->string('cid');
             $table->string('nim_nip');
             $table->string('nama_pengguna');
             $table->string('alamat');
+            $table->string('fakultas');
             $table->string('foto');
             $table->timestamps();
         });

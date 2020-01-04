@@ -13,7 +13,7 @@
                     <div class="card-body">
                         <h3 class="card-title">Mahasiswa</h3>
                         <p class="card-text">Jumlah dari pengunjung mahasiswa adalah</p>
-                        <h1><b>69</b></h1>
+                        <h1><b>{{ $mahasiswa }}</b></h1>
                     </div>
                 </div>
             </div>
@@ -22,18 +22,44 @@
                     <div class="card-body">
                         <h3 class="card-title">Pegawai</h3>
                         <p class="card-text">Jumlah dari pengunjung pegawai adalah</p>
-                        <h1><b>12269</b></h1>
+                        <h1><b>{{ $pegawai }}</b></h1>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row" id="admin_row">
             <div class="col">
+                @if (session('status')) 
+                    @if (session('status')['mode'] != null)
+                        <div class="alert alert-success" role="alert">
+                            Admin {{ session('status')['user'] }} telah di 
+                            @if (session('status')['mode'] == 1)
+                                verifikasi.
+                            @else
+                                hapus.
+                            @endif
+                        </div>
+                    @endif
+                    @if(session('status')['mode'] != null)
+                        @if (session('status')['mode'] == 404)
+                            <div class="alert alert-danger" role="alert">
+                                Gagal melakukan aksi {{ session('status')['user'] }}.
+                            </div>
+                        @endif
+                    @endif
+                @endif
+
                 <div class="tambah-data">
-                    <form class="form-inline justify-content-end">
+                    <form class="form-inline justify-content-end" action="{{ route('cariAdmin') }}" method="GET" >
+                        @csrf
+                        
                         <div class="form-group mx-sm-3 mb-2 ">
-                            <label for="inputCari" class="sr-only">Ketik Nama</label>
-                            <input type="password" class="form-control" id="inputCari" placeholder="Nama dari admin">
+                            <input type="text" class="form-control @error('username') is-invalid @enderror" id="nameAdmin" name="nameAdmin" placeholder="Nama dari admin">
+                            @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                         <button type="submit" class="btn btn-primary mb-2">Cari</button>
                     </form>
@@ -50,30 +76,44 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>
-                                <div class="badge badge-success text-wrap mon-f-badge" href="">
-                                    Sudah Verifikasi
-                                </div>
-                                <div class="badge badge-warning text-wrap mon-f-badge" href="">
-                                    Belum Verifikasi
-                                </div>
-                            </td>
-                            <td>
-                                <a class="badge badge-warning text-wrap mon-f-badge"  data-toggle="modal" data-target="#verifModal">
-                                    Verifikasi
-                                </a>
-                                <a class="badge badge-danger text-wrap text-white mon-f-badge"  data-toggle="modal" data-target="#hapusModal">
-                                    Hapus
-                                </a>
-                            </td>
-                        </tr>
+                        @if ($kosong)
+                            <tr>
+                                <td colspan="6"> <p  class="d-flex justify-content-center">Admin Tidak Ada</p></td>
+                            </tr>
+                        @else    
+                            @foreach ($admin as $item)                            
+                                <tr>
+                                    <th scope="row">{{ $loop->index + 1 }}</th>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->username }}</td>
+                                    <td>{{ $item->notelp }}</td>
+                                    <td>
+                                        @if ($item->akun_verified_at == NULL)
+                                            <div class="badge badge-warning text-wrap mon-f-badge">
+                                                Belum Verifikasi
+                                            </div>
+                                        @else
+                                            <div class="badge badge-success text-wrap mon-f-badge">
+                                                Sudah Verifikasi
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($item->akun_verified_at == NULL)
+                                            <a class="badge badge-warning text-wrap mon-f-badge"  data-toggle="modal" data-target="#verifModal">
+                                                Verifikasi
+                                            </a>
+                                        @endif
+                                        <a class="badge badge-danger text-wrap text-white mon-f-badge"  data-toggle="modal" data-target="#hapusModal" onclick="return getID('{{ $item->id }}', '{{ $item->name }}', 2)">
+                                            Hapus
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
                     </tbody>
                 </table>
+                {{ $admin->links() }}
             </div>
         </div>
     </div>
@@ -93,9 +133,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger " data-dismiss="modal">Tidak</button>
-                    <form action="">
+                    <form action="{{ route('verifikasiAdmin') }}" method="POST">
                         <input type="text" name="idVerifData" id="idVerifData" style="display:none">
-                        <button type="button" class="btn btn-primary">Ya</button>
+                        <input type="text" name="nameVerifData" id="nameVerifData" style="display:none">
+                        <button type="submit" class="btn btn-primary">Ya</button>
                     </form>
                 </div>
             </div>
@@ -117,8 +158,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger " data-dismiss="modal">Tidak</button>
-                    <form action="">
+                    <form action="{{ route('hapusAdmin') }}" method="POST">
+                        @csrf
                         <input type="text" name="idHapusData" id="idHapusData" style="display:none">
+                        <input type="text" name="nameHapusData" id="nameHapusData" style="display:none">
                         <button type="submit" class="btn btn-primary">Ya</button>
                     </form>
                 </div>

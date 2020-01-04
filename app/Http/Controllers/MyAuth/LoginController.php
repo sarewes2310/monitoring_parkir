@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class LoginController extends Controller
 {
     //
-    protected $redirectTo = '/';
+    protected $redirectTo = '/user/dashboard';
 
     public function __construct()
     {
