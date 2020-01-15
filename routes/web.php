@@ -11,25 +11,23 @@
 |
 */
 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
 // ROUTE HOMEPAGE
 Route::group(['prefix' => ''], function () {
     Route::get('', function () {
         return view('home/index');
     })->name('home');
-    Route::get('live_cam', function () {
-        return view('home/live_cam');
-    })->name('live_cam');
     Route::get('loginv2', function () {
         return view('home/login');
     })->name('loginv2');
     Route::get('daftar', function () {
         return view('home/register');
     })->name('daftar');
-    Route::get('test', function (App\Repositories\AccessRepo $access) {
-        /*$access::create([
-            'nama_access' => 'admin',
-        ]);*/
-        var_dump($access::where('idAccess', 10));
+    Route::get('test', function () {
+        $imagename = Hash::make(Str::random(60)).".jpg";
+        shell_exec("ffmpeg -y -i rtsp://admin:admin123@192.168.1.102:8554/unicast -vframes 1 E:/xampp/htdocs/monitoring_parkir/storage/app/public/data_file/parkir/".$imagename);
     });
     Route::get('timetest', function () {
         date_default_timezone_set("Asia/Jakarta");
@@ -38,7 +36,14 @@ Route::group(['prefix' => ''], function () {
         //$time = new DateTime();
        // echo $time->format('Y-m-d \t h:i:s');
     });
+    Route::group(['prefix' => 'live_cam'], function () {
+        Route::get('', function () {
+            return view('home/live_cam');
+        })->name('live_cam'); 
+        Route::get('cari', 'Users\Parkir@cariLiveCam')->name('cari_live_cam'); 
+    });
 });
+
 
 Route::middleware(['auth'])->group(function(){
     // ROUTE ACCOUNT USER
@@ -54,21 +59,25 @@ Route::middleware(['auth'])->group(function(){
         Route::group(['prefix' => 'transaksi'], function () {
     
             // TAMPIL DATA
-            Route::get('', 'Users\Transaksi@index')->name('transaksi');
-            Route::get('cari', 'Users\Transaksi@cari')->name('cariTransaksi');
+            Route::get('', 'Users\Parkir@index')->name('transaksi');
+            Route::get('cari', 'Users\Parkir@cari')->name('cariTransaksi');
             
             // TAMBAH DATA
-            Route::get('tambah', 'Users\Transaksi@tampilan_tambah')->name('tambah_transaksi');
-            Route::post('tambah', 'Users\Transaksi@tambah')->name('simpan_tambah_transaksi');
+            Route::get('tambah', 'Users\Parkir@tampilan_tambah')->name('tambah_transaksi');
+            Route::post('tambah', 'Users\Parkir@tambah')->name('simpan_tambah_transaksi');
             
             // EDIT DATA
-            Route::get('edit', 'Users\Transaksi@tampilan_edit')->name('edit_transaksi');
-            Route::post('edit', 'Users\Transaksi@edit')->name('simpan_edit_transaksi');
+            Route::get('edit', 'Users\Parkir@tampilan_edit')->name('edit_transaksi');
+            Route::post('edit', 'Users\Parkir@edit')->name('simpan_edit_transaksi');
+    
+            // HAPUS DATA
+            Route::post('hapus', 'Users\Parkir@hapus')->name('hapus_transaksi');
     
         });
         
         // ROUTE PREFIX PEGAWAI
         Route::group(['prefix' => 'pegawai'], function () {
+
             // TAMPIL DATA
             Route::get('', 'Users\Pegawai@index')->name('pegawai');
             Route::get('dashboard/cari', 'Users\Pegawai@cari')->name('cariPegawai');
@@ -82,12 +91,11 @@ Route::middleware(['auth'])->group(function(){
             Route::post('edit', 'Users\Pegawai@edit')->name('simpan_edit_pegawai');
     
             // HAPUS DATA
-            Route::post('hapus', 'Users\Pegawai@hapusPegawai')->name('hapus_pegawai');
+            Route::post('hapus', 'Users\Pegawai@hapus')->name('hapus_pegawai');
         });
     
         // ROUTE PREFIX MAHASISWA
         Route::group(['prefix' => 'mahasiswa'], function () {
-    
     
             // TAMPIL DATA
             Route::get('', 'Users\Mahasiswa@index')->name('mahasiswa');
@@ -102,10 +110,55 @@ Route::middleware(['auth'])->group(function(){
             Route::post('edit', 'Users\Mahasiswa@edit')->name('simpan_edit_mahasiswa');
     
             // HAPUS DATA
-            Route::post('hapus', 'Users\Mahasiswa@hapusMahasiswa')->name('hapus_mahasiswa');
+            Route::post('hapus', 'Users\Mahasiswa@hapus')->name('hapus_mahasiswa');
+        });
+
+        // ROUTE PREFIX TEMPAT PARKIR
+        Route::group(['prefix' => 'tempat_parkir'], function () {
+    
+            // TAMPIL DATA
+            Route::get('', 'Users\TempatParkir@index')->name('tempatparkir');
+            Route::get('cari', 'Users\TempatParkir@cari')->name('cariTempatparkir');
+            
+            // TAMBAH DATA
+            Route::get('tambah', 'Users\TempatParkir@tampilan_tambah')->name('tambah_tempatparkir');
+            Route::post('tambah', 'Users\TempatParkir@tambah')->name('simpan_tambah_tempatparkir');
+            
+            // EDIT DATA
+            Route::get('edit', 'Users\TempatParkir@tampilan_edit')->name('edit_tempatparkir');
+            Route::post('edit', 'Users\TempatParkir@edit')->name('simpan_edit_tempatparkir');
+    
+            // HAPUS DATA
+            Route::post('hapus', 'Users\TempatParkir@hapus')->name('hapus_tempatparkir');
+        });
+
+        // ROUTE PREFIX ALAT PARKIR
+        Route::group(['prefix' => 'alat_parkir'], function () {
+    
+            // TAMPIL DATA
+            Route::get('', 'Users\AlatParkir@index')->name('alat_parkir');
+            Route::get('cari', 'Users\AlatParkir@cari')->name('cariAlat_parkir');
+            
+            // TAMBAH DATA
+            Route::get('tambah', 'Users\AlatParkir@tampilan_tambah')->name('tambah_alat_parkir');
+            Route::post('tambah', 'Users\AlatParkir@tambah')->name('simpan_tambah_alat_parkir');
+            
+            // EDIT DATA
+            Route::get('edit', 'Users\AlatParkir@tampilan_edit')->name('edit_alat_parkir');
+            Route::post('edit', 'Users\AlatParkir@edit')->name('simpan_edit_alat_parkir');
+    
+            // HAPUS DATA
+            Route::post('hapus', 'Users\AlatParkir@hapus')->name('hapus_alat_parkir');
+
         });
     });
 });
+Route::get('mode', 'Users\AlatParkir@getMode')->name('getmode_alat_parkir');
+Route::get('testchangemode', 'Users\Parkir@changeModeAP')->name('gantimode_alat_parkir');
+//Route::get('testcapture', 'Users\AlatParkir@testCapture')->name('captureimage');
+Route::get('parkirmasuk', 'Users\Parkir@parkirMasuk')->name('parkirmasuk');
+Route::get('parkirkeluar', 'Users\Parkir@parkirKeluar')->name('parkirkeluar');
+
 Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');

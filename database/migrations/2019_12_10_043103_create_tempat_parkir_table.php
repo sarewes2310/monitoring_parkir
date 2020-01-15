@@ -14,8 +14,7 @@ class CreateTempatParkirTable extends Migration
     public function up()
     {
         Schema::create('tempat_parkir', function (Blueprint $table) {
-            $table->bigIncrements('idTempatParkir');
-            $table->bigInteger('idAlatParkir');
+            $table->bigIncrements('id');
             $table->string('nama_tempat_parkir');
             $table->string('alamat');
             $table->timestamps();

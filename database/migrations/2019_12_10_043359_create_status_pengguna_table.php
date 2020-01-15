@@ -14,7 +14,7 @@ class CreateStatusPenggunaTable extends Migration
     public function up()
     {
         Schema::create('status_pengguna', function (Blueprint $table) {
-            $table->bigIncrements('idStatusPengguna');
+            $table->bigIncrements('id');
             $table->string('nama_status_pengguna');
             $table->timestamps();
         });

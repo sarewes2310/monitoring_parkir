@@ -70,6 +70,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Users::class,
         ],
+        'parkir' => [
+            'driver' => 'eloquent',
+            'model' => AppRepositories\ParkirRepo::class,
+        ]
 
         // 'users' => [
         //     'driver' => 'database',

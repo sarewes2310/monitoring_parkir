@@ -26,7 +26,7 @@ class Mahasiswa extends Controller
 
     protected function inisialisasi()
     {
-        $data['mahasiswa'] = DB::table('pengguna')->where('idStatusPengguna',1)->paginate(15);
+    $data['mahasiswa'] = DB::table('pengguna')->where('statuspengguna_id',1)->paginate(15);
         //if(count($data['mahasiswa']) > 0) $data['kosong'] = false;
         //else $data['kosong'] = true;
         $data += $this->cekDataKosong($data);
@@ -55,7 +55,7 @@ class Mahasiswa extends Controller
 
     protected function getCariData(array $data)
     {
-        return $data['mahasiswa'] = DB::table('pengguna')->where('idStatusPengguna',1)
+        return $data['mahasiswa'] = DB::table('pengguna')->where('statuspengguna_id',1)
         ->where('nama_pengguna', 'like', ''.$data['inputCari'].'%')
         ->orWhere('nim_nip', 'like', ''.$data['inputCari'].'%');
     }
@@ -70,7 +70,7 @@ class Mahasiswa extends Controller
     protected function validatorCrud(array $data)
     {
         return Validator::make($data,[
-            'nim_nip' => ['required', 'numeric', 'max:20'],
+            'nim_nip' => ['required', 'string', 'max:60'],
             'nama_pengguna' => ['required', 'string', 'max:40'],
             'alamat' => ['required', 'string', 'max:255'],
             'cid' => ['required', 'string', 'max:20'],
@@ -81,7 +81,7 @@ class Mahasiswa extends Controller
     protected function tambahQuery(array $data)
     {
         return PenggunaRepo::create([
-            'idStatusPengguna' => 1,
+            'statuspengguna_id' => 1,
             'cid' => $data['cid'],
             'nim_nip' => $data['nim_nip'],
             'nama_pengguna' => $data['nama_pengguna'],
@@ -105,14 +105,14 @@ class Mahasiswa extends Controller
     protected function editQuery(array $data)
     {
         $dataku = [];
-        $penggunaRepo = PenggunaRepo::where('idPengguna', $data['idPengguna'])->first();
+        $penggunaRepo = PenggunaRepo::where('id', $data['id'])->first();
         if(is_null($data['cid']) == false) $dataku['cid'] = $data['cid'];
         if(is_null($data['nim_nip']) == false) $dataku['nim_nip'] = $data['nim_nip'];
         if(is_null($data['nama_pengguna']) == false) $dataku['nama_pengguna'] = $data['nama_pengguna'];
         if(is_null($data['fakultas']) == false) $dataku['fakultas'] = $data['fakultas'];
         if(is_null($data['alamat']) == false) $dataku['alamat'] = $data['alamat'];
         if(is_null($data['foto']) == false) $dataku['foto'] = $data['foto'];
-        return $penggunaRepo->where('idPengguna', $data['idPengguna'])->update($dataku);
+        return $penggunaRepo->where('id', $data['id'])->update($dataku);
     }
 
     protected function notificationData($mode, $user, $message, $route, Request $request)
@@ -178,9 +178,9 @@ class Mahasiswa extends Controller
         }
     }
 
-    protected function hapus(array $data)
+    protected function hapusMahasiswa(array $data)
     {
-        return PenggunaRepo::where('idPengguna',$data['idHapusData'])->delete();
+        return PenggunaRepo::where('id',$data['idHapusData'])->delete();
     }
 
     public function tampilan_tambah()
@@ -191,14 +191,14 @@ class Mahasiswa extends Controller
 
     public function tampilan_edit(Request $request)
     {
-        $data['mahasiswa'] = PenggunaRepo::where('idPengguna',$request->id_mahasiswa)->first();
-        return $this->redirectTo($this->pathedit, $data);
+        $dataedit['mahasiswa'] = PenggunaRepo::where('id',$request->id_mahasiswa)->first();
+        return $this->redirectTo($this->pathedit, $dataedit);
     }
 
-    public function hapusMahasiswa(Request $request)
+    public function hapus(Request $request)
     {
         $reqData = $request->all();
-        if($this->hapus($reqData)) return $this->notificationData(3, $request->nameHapusData, 'HAPUS DATA', 'mahasiswa', $request);
+        if($this->hapusMahasiswa($reqData)) return $this->notificationData(3, $request->nameHapusData, 'HAPUS DATA', 'mahasiswa', $request);
         else return $this->notificationData(404, $request->nameHapusData, 'HAPUS DATA', 'mahasiswa', $request);
     }
 }

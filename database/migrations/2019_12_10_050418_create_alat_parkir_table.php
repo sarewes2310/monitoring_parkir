@@ -14,9 +14,10 @@ class CreateAlatParkirTable extends Migration
     public function up()
     {
         Schema::create('alat_parkir', function (Blueprint $table) {
-            $table->bigIncrements('idAlatParkir');
+            $table->bigIncrements('id');
+            $table->string('mac');
             $table->smallInteger('mode');
-            $table->smallInteger('status');
+            $table->string('token');
             $table->timestamps();
         });
     }

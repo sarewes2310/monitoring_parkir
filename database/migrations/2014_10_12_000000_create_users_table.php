@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->timestamp('akun_verified_at')->nullable();
-            $table->bigInteger('idAccess');
+            $table->bigInteger('access_id');
             $table->rememberToken();
             $table->timestamps();
         });

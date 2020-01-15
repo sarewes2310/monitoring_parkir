@@ -22,6 +22,8 @@
                 <a href="{{ route('transaksi') }}" class="list-group-item list-group-item-action bg-light" id="menu_transaksi">Transaksi</a>
                 <a href="{{ route('mahasiswa') }}" class="list-group-item list-group-item-action bg-light" id="menu_mahasiswa">Mahasiswa</a>
                 <a href="{{ route('pegawai') }}" class="list-group-item list-group-item-action bg-light" id="menu_pegawai">Pegawai</a>
+                <a href="{{ route('tempatparkir') }}" class="list-group-item list-group-item-action bg-light" id="menu_parkir">Parkir</a>
+                <a href="{{ route('tempatparkir') }}" class="list-group-item list-group-item-action bg-light" id="menu_parkir">Camera</a>
             </div>
         </div>
         <!-- /#sidebar-wrapper -->

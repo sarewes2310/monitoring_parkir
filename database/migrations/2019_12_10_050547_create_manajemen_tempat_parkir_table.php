@@ -14,9 +14,9 @@ class CreateManajemenTempatParkirTable extends Migration
     public function up()
     {
         Schema::create('manajemen_tempat_parkir', function (Blueprint $table) {
-            $table->bigIncrements('idMTP');
-            $table->bigInteger('idTempatParkir');
-            $table->bigInteger('idUser');
+            $table->bigIncrements('id');
+            $table->bigInteger('tempatparkir_id');
+            $table->bigInteger('users_id');
             $table->smallInteger('mode');
             $table->timestamps();
         });

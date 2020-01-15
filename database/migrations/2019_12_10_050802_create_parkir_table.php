@@ -14,10 +14,11 @@ class CreateParkirTable extends Migration
     public function up()
     {
         Schema::create('parkir', function (Blueprint $table) {
-            $table->bigIncrements('idParkir');
-            $table->bigInteger('idPengguna');
-            $table->bigInteger('idTempatParkir');
-            $table->smallInteger('status');
+            $table->bigIncrements('id');
+            $table->bigInteger('pengguna_id');
+            $table->bigInteger('tempatparkir_id');
+            $table->string('foto');
+            $table->boolean('verifikasi');
             $table->timestamps();
         });
     }

@@ -33,7 +33,7 @@ class PenggunaTableSeeder extends Seeder
             DB::table('pengguna')->insert([
                 'nama_pengguna' => $faker->name,
                 'fakultas' => Str::random(10),
-                'idStatusPengguna' => 1,
+                'statuspengguna_id' => 1,
                 'cid' => $faker->uuid,
                 'nim_nip' => $faker->ean8,
                 'alamat' => $faker->address,

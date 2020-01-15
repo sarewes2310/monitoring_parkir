@@ -26,7 +26,7 @@ class Pegawai extends Controller
 
     protected function inisialisasi()
     {
-        $data['pegawai'] = DB::table('pengguna')->where('idStatusPengguna', 2)->paginate(15);
+        $data['pegawai'] = DB::table('pengguna')->where('statuspengguna_id', 2)->paginate(15);
         //if(count($data['pegawai']) > 0) $data['kosong'] = false;
         //else $data['kosong'] = true;
         $data += $this->cekDataKosong($data);
@@ -55,7 +55,7 @@ class Pegawai extends Controller
 
     protected function getCariData(array $data)
     {
-        return $data['pegawai'] = DB::table('pengguna')->where('idStatusPengguna', 2)
+        return $data['pegawai'] = DB::table('pengguna')->where('statuspengguna_id', 2)
         ->where('nama_pengguna', 'like', ''.$data['inputCari'].'%')
         ->orWhere('nim_nip', 'like', ''.$data['inputCari'].'%');
     }
@@ -81,7 +81,7 @@ class Pegawai extends Controller
     protected function tambahQuery(array $data)
     {
         return PenggunaRepo::create([
-            'idStatusPengguna' => 2,
+            'statuspengguna_id' => 2,
             'cid' => $data['cid'],
             'nim_nip' => $data['nim_nip'],
             'nama_pengguna' => $data['nama_pengguna'],
@@ -105,14 +105,14 @@ class Pegawai extends Controller
     protected function editQuery(array $data)
     {
         $dataku = [];
-        $penggunaRepo = PenggunaRepo::where('idPengguna', $data['idPengguna'])->first();
+        $penggunaRepo = PenggunaRepo::where('id', $data['id'])->first();
         if(is_null($data['cid']) == false) $dataku['cid'] = $data['cid'];
         if(is_null($data['nim_nip']) == false) $dataku['nim_nip'] = $data['nim_nip'];
         if(is_null($data['nama_pengguna']) == false) $dataku['nama_pengguna'] = $data['nama_pengguna'];
         if(is_null($data['fakultas']) == false) $dataku['fakultas'] = $data['fakultas'];
         if(is_null($data['alamat']) == false) $dataku['alamat'] = $data['alamat'];
         if(is_null($data['foto']) == false) $dataku['foto'] = $data['foto'];
-        return $penggunaRepo->where('idPengguna', $data['idPengguna'])->update($dataku);
+        return $penggunaRepo->where('id', $data['id'])->update($dataku);
     }
 
     protected function notificationData($mode, $user, $message, $route, Request $request)
@@ -178,9 +178,9 @@ class Pegawai extends Controller
         }
     }
 
-    protected function hapus(array $data)
+    protected function hapusPegawai(array $data)
     {
-        return PenggunaRepo::where('idPengguna',$data['idHapusData'])->delete();
+        return PenggunaRepo::where('id',$data['idHapusData'])->delete();
     }
 
     public function tampilan_tambah()
@@ -191,14 +191,15 @@ class Pegawai extends Controller
 
     public function tampilan_edit(Request $request)
     {
-        $data['pegawai'] = PenggunaRepo::where('idPengguna',$request->id_pegawai)->first();
+        $data['pegawai'] = PenggunaRepo::where('id',$request->id_pegawai)->first();
+        //return $request->all();
         return $this->redirectTo($this->pathedit, $data);
     }
 
-    public function hapusPegawai(Request $request)
+    public function hapus(Request $request)
     {
         $reqData = $request->all();
-        if($this->hapus($reqData)) return $this->notificationData(3, $request->nameHapusData, 'HAPUS DATA', 'pegawai', $request);
+        if($this->hapusPegawai($reqData)) return $this->notificationData(3, $request->nameHapusData, 'HAPUS DATA', 'pegawai', $request);
         else return $this->notificationData(404, $request->nameHapusData, 'HAPUS DATA', 'pegawai', $request);
     }
 }

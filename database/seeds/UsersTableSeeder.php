@@ -24,7 +24,7 @@ class UsersTableSeeder extends Seeder
                 'notelp' => $faker->e164PhoneNumber,
                 'username' => $faker->name,
                 'password' => $faker->name,
-                'idAccess' => 1,
+                'access_id' => 1,
             ]);
         }
     }

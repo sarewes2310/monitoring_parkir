@@ -58,8 +58,8 @@ class Dashboard extends Controller
 
     protected function inisialisasi_jumlah_pengguna()
     {
-        $data['mahasiswa'] = PenggunaRepo::where('idStatusPengguna', 1)->count();
-        $data['pegawai'] = PenggunaRepo::where('idStatusPengguna', 2)->count();
+        $data['mahasiswa'] = PenggunaRepo::where('statuspengguna_id', 1)->count();
+        $data['pegawai'] = PenggunaRepo::where('statuspengguna_id', 2)->count();
         #$data['mode'] = null;
         #$data['user'] = null;
         return $data;

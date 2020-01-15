@@ -26,7 +26,7 @@
                         <div class="col-md-6 mb-3">
                             <label for="nama">Nama</label>
                             <input type="text" class="form-control @error('nama_pengguna') is-invalid @enderror" id="nama_pengguna" name="nama_pengguna" placeholder="Nama dari pegawai" required>
-                            @error('nim_nip')
+                            @error('nama_pengguna')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -38,7 +38,7 @@
                     <div class="mb-3">
                         <label for="alamat">Unit atau Fakultas</label>
                         <textarea class="form-control @error('fakultas') is-invalid @enderror" id="fakultas" name="fakultas" placeholder="Nama Unit atau Fakultas" required></textarea>
-                        @error('nim_nip')
+                        @error('fakultas')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
@@ -49,7 +49,7 @@
                     <div class="mb-3">
                         <label for="alamat">Alamat</label>
                         <textarea class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" placeholder="Alamat rumah atau kost" required></textarea>
-                        @error('nim_nip')
+                        @error('alamat')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
@@ -61,7 +61,7 @@
                         <div class="col-lg-10">
                             <label class="sr-only" for="cid">CID</label>
                             <input type="text" class="form-control mb-2 @error('cid') is-invalid @enderror" id="cid" name="cid" placeholder="CID dari RFID Tag" required>
-                            @error('nim_nip')
+                            @error('cid')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>

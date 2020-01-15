@@ -28,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/user/dashboard';
 
     /**
      * Create a new controller instance.
@@ -79,7 +79,7 @@ class RegisterController extends Controller
             'notelp' => $data['username'],
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
-            'idAccess' => 1,
+            'access_id' => 1,
         ]);
     }
 }

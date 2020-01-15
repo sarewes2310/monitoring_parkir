@@ -60,14 +60,14 @@
                                     <td>
                                         <a class="badge badge-warning text-wrap mon-f-badge" href="{{ route('edit_mahasiswa') }}"
                                             onclick="event.preventDefault();
-                                                    document.getElementById('edit-form').submit();">
+                                                    document.getElementsByTagName('form')[{{ $loop->index + 2 }}].submit();">
                                             Edit
                                         </a>
-                                        <form id="edit-form" action="{{ route('edit_mahasiswa') }}" method="GET" style="display: none;">
+                                        <form action="{{ route('edit_mahasiswa') }}" method="GET" style="display: none;">
                                             @csrf
-                                            <input type="text" name="id_mahasiswa" id="id_mahasiswa" value="{{ $item->idPengguna }}">
+                                            <input type="text" name="id_mahasiswa" value="{{ $item->id }}">
                                         </form>
-                                        <a class="badge badge-danger text-wrap text-white mon-f-badge"  data-toggle="modal" data-target="#hapusModal" onclick="return getID('{{ $item->idPengguna }}','{{ $item->nama_pengguna }}')">
+                                        <a class="badge badge-danger text-wrap text-white mon-f-badge"  data-toggle="modal" data-target="#hapusModal" onclick="return getID('{{ $item->id }}','{{ $item->nama_pengguna }}')">
                                             Hapus
                                         </a>
                                     </td>

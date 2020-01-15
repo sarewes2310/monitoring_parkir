@@ -14,8 +14,8 @@ class CreatePenggunaTable extends Migration
     public function up()
     {
         Schema::create('pengguna', function (Blueprint $table) {
-            $table->bigIncrements('idPengguna');
-            $table->bigInteger('idStatusPengguna');
+            $table->bigIncrements('id');
+            $table->bigInteger('statuspengguna_id');
             $table->string('cid');
             $table->string('nim_nip');
             $table->string('nama_pengguna');
