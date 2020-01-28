@@ -22,10 +22,10 @@
                 @endif
 
                 <div class="tambah-data">
-                    <form class="form-inline" method="GET" action="{{ route('cariAlat_parkir') }}">
+                    <form class="form-inline" method="GET" action="{{ route('cariTransaksi') }}">
                         @csrf
                         <div class="form-group mx-sm-3 mb-2">
-                            <input type="text" class="form-control" id="inputCari" name="inputCari" placeholder="Mac Address dari alat parkir">
+                            <input type="text" class="form-control" id="inputCari" name="inputCari" placeholder="CID Mahasiswa atau Pegawai">
                         </div>
                         <button type="submit" class="btn btn-primary mb-2">Cari</button>
                     </form>

@@ -79,7 +79,7 @@
                     <div class="center_size_login_page">
                         <p class="text-center">
                             Sudah mempunyai akun silahkan login pada halaman 
-                            <a class="badge btn-grad-orange text-wrap">LOGIN</a> (<b>KHUSUS PEGAWAI PARKIR</b>).
+                            <a class="badge btn-grad-orange text-wrap" href="{{ route('loginv2') }}">LOGIN</a> (<b>KHUSUS PEGAWAI PARKIR</b>).
                         </p>    
                     </div>
                 </div>

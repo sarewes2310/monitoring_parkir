@@ -22,6 +22,7 @@ class CreatePenggunaTable extends Migration
             $table->string('alamat');
             $table->string('fakultas');
             $table->string('foto');
+            $table->string('password');
             $table->timestamps();
         });
     }

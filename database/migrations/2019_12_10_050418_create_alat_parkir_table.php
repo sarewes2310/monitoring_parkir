@@ -18,6 +18,7 @@ class CreateAlatParkirTable extends Migration
             $table->string('mac');
             $table->smallInteger('mode');
             $table->string('token');
+            $table->int('tipe');
             $table->timestamps();
         });
     }

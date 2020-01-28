@@ -6,6 +6,7 @@ function getID(data, nama, tipe)
     {
         $('#idVerifData').val(data);
         $('#nameVerifData').val(nama);
+        $('#nameadmin').html(nama);
     }else
     {
         $('#idHapusData').val(data);

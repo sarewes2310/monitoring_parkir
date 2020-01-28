@@ -1,6 +1,6 @@
 @extends('users.header')
 @section('title')
-    Edit Data Tempat Parkir
+    Edit Data Alat Parkir
 @endsection
 @section('custom_css')
     <link rel="stylesheet" href="{{ url('css/users/custom_page_tempat_parkir.css') }}">
@@ -27,15 +27,21 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group col-md-12">
-                          <label for="tempatparkir_id">Pilih Posisi Tempat Parkir</label>
-                          <select id="tempatparkir_id" name="tempatparkir_id" class="form-control">
-                              <!--<option value="1">A</option>
-                              <option value="2">B</option>-->
-                            @foreach ($tempat_parkir as $item)
-                                <option value="{{ $item->id }}" @if ($item->id == $map_alat_parkir_id) selected @endif>{{ $item->nama_tempat_parkir }}</option>
-                            @endforeach
-                          </select>
+                        <div class="form-group col-md-6">
+                            <label for="tempatparkir_id">Pilih Posisi Tempat Parkir</label>
+                            <select id="tempatparkir_id" name="tempatparkir_id" class="form-control">
+                                @foreach ($tempat_parkir as $item)
+                                    <option value="{{ $item->id }}" @if ($item->id == $map_alat_parkir_id) selected @endif>{{ $item->nama_tempat_parkir }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="tipe">Pilih Jenis Alat Parkir</label>
+                            <select id="tipe" name="tipe" class="form-control" required>
+                                <option selected>Choose...</option>
+                                <option value="1" @if ($alat_parkir->tipe == 1) selected @endif>Pintu Masuk</option>
+                                <option value="2" @if ($alat_parkir->tipe == 2) selected @endif>Pintu Keluar</option>
+                            </select>
                         </div>
                     </div>
 
@@ -76,7 +82,9 @@
 
 @section('custom_js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-    <script src="{{ url('js/users/custom_page_parkir.js') }}"></script>
+    <script src="{{ url('js/users/custom_page_alat_parkir.js') }}">
+    
+    </script>
     <script>
         //$('#tempatparkir_id').val();
     </script>

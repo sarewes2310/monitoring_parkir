@@ -55,6 +55,28 @@
                             </div>
                         @enderror
                     </div>
+                    
+                    <!-- INPUT PASSWORD -->
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nip_nim">Password</label>
+                            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Password dari pegawai" required>
+                            @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror   
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="nama">Konfirmasi Passowrd</label>
+                            <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror" id="password_confirmation" name="password_confirmation" placeholder="Konfirmasi Password" required>
+                            @error('password_confirmation')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror   
+                        </div>
+                    </div>
 
                     <!-- INPUT CID -->
                     <div class="form-row align-items-center">
@@ -71,7 +93,7 @@
                             <button type="button" class="btn btn-primary mb-2 w-100" onclick="return getRFID()">CEK</button>
                         </div>
                     </div>
-
+                    
                     <!-- INPUT FOTO -->
                     <div class="custom-file">
                         <input type="file" class="custom-file-input @error('foto') is-invalid @enderror" id="foto" name="foto" required>

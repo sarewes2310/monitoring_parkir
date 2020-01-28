@@ -150,7 +150,7 @@ class TempatParkir extends Controller
 
     public function tampilan_edit(Request $request)
     {
-        $data['tempat_parkir'] = TempatParkirRepo::where('id',$request->id_tempat_parkir)->first();
+        $data['tempat_parkir'] = TempatParkirRepo::where('id',$request->id_tempat_parkir)->firstOrFail();
         return $this->redirectTo($this->pathedit, $data);
     }
 

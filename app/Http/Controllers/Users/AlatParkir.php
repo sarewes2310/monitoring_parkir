@@ -28,7 +28,10 @@ class AlatParkir extends Controller
 
     protected function inisialisasi()
     {
-        $data['alat_parkir'] = DB::table('alat_parkir')->paginate(15);
+        $data['alat_parkir'] = DB::table('alat_parkir')
+        ->join('map_alat_parkir', 'alat_parkir.id', 'map_alat_Parkir.alatparkir_id')
+        ->join('tempat_parkir', 'tempat_parkir.id', 'map_alat_Parkir.tempatparkir_id')
+        ->paginate(15);
         //if(count($data['alat_parkir']) > 0) $data['kosong'] = false;
         //else $data['kosong'] = true;
         $data += $this->cekDataKosong($data);
@@ -81,6 +84,7 @@ class AlatParkir extends Controller
             'mac' => $data['mac'],
             'mode' => 1,
             'token' => Str::random(60),
+            'tipe' => $data['tipe'],
         ]);
     }
 
@@ -99,16 +103,19 @@ class AlatParkir extends Controller
     protected function editQuery(array $data)
     {
         $dataku = [];
-        $AlatParkirRepo = AlatParkirRepo::where('id', $data['id'])->first();
+        //$AlatParkirRepo = AlatParkirRepo::where('id', $data['id'])->first();
         if(is_null($data['mac']) == false) $dataku['mac'] = $data['mac'];
-        return $AlatParkirRepo->where('id', $data['id'])->update($dataku);
+        if(is_null($data['tipe']) == false) $dataku['tipe'] = $data['tipe'];
+        return AlatParkirRepo::where('id', $data['id'])->update($dataku);
     }
 
     protected function editQuery2(array $data)
     {
         $dataku = [];
-        $AlatParkirRepo = DB::table('map_alat_parkir')->where('id', $data['id'])->first();
-        return $AlatParkirRepo;
+        $MapAlatParkir = DB::table('map_alat_parkir');
+        if(is_null($data['tempatparkir_id']) == false) $dataku['tempatparkir_id'] = $data['tempatparkir_id'];
+        $dataku['updated_at'] = now();
+        return $MapAlatParkir->where('alatparkir_id', $data['id'])->update($dataku);
         //if(is_null($data['tempatparkir_id']) == false) $dataku['tempatparkir_id'] = $data['tempatparkir_id'];
         //return $AlatParkirRepo->where('id', $AlatParkirRepo['id'])->update($dataku);
     }
@@ -157,9 +164,16 @@ class AlatParkir extends Controller
         }else
         {
             $dataReq = $request->all();
-            return $this->editQuery2($dataReq);
-            //if($this->editQuery($dataReq)) return $this->notificationData(2, $request->mac, 'EDIT', 'alat_parkir', $request);
-            //else return $this->notificationData(404, $request->mac, 'EDIT DATA', 'alat_parkir', $request);
+            if($this->editQuery($dataReq))
+            {
+                if($this->editQuery2($dataReq)) return $this->notificationData(2, $request->mac, 'EDIT', 'alat_parkir', $request);
+                else return $this->notificationData(404, $request->mac, 'EDIT DATA', 'alat_parkir', $request);
+                //return $this->editQuery2($dataReq);
+            }
+            else
+            {
+                return $this->notificationData(404, $request->mac, 'EDIT DATA', 'alat_parkir', $request);
+            } 
         }
     }
 
@@ -178,12 +192,12 @@ class AlatParkir extends Controller
 
     public function tampilan_edit(Request $request)
     {
+        $data['alat_parkir'] = AlatParkirRepo::where('id',$request->id_alat_parkir)->firstOrFail();
         $data['tempat_parkir'] = TempatParkirRepo::all();
         $data['map_alat_parkir_id'] = DB::table('map_alat_parkir')
                     ->where('alatparkir_id', $request->id_alat_parkir)
                     ->select('tempatparkir_id')
                     ->get()[0]->tempatparkir_id;
-        $data['alat_parkir'] = AlatParkirRepo::where('id',$request->id_alat_parkir)->first();
         //return $data;
         return $this->redirectTo($this->pathedit, $data);
     }
@@ -204,8 +218,6 @@ class AlatParkir extends Controller
     {
         $reqData = $request->all();
         //$this->modeValidator($reqData);
-        //var_dump($reqData);
-        //var_dump(AlatParkirRepo::where('mac',$reqData['mac'])->first());
         $data = AlatParkirRepo::where('mac', $reqData['mac'])->where('token', $reqData['access_token'])->first();
         //if(is_null($data))return $data;
         if(is_null($data))
@@ -222,37 +234,5 @@ class AlatParkir extends Controller
                 return response()->json(array('cek' => false));
             }
         }
-    }
-
-    public function changeMode(Request $request)
-    {
-        $reqData = $request->all();
-        //var_dump($reqData);
-        //$this->modeValidator($reqData);
-        /*if($reqData->cek == true) $reqData['cek'] = true;
-        else $reqData['cek'] = false;*/
-        $reqData['cek'] = true;
-        return response()->json($reqData);
-        //var_dump(AlatParkirRepo::where('mac',$reqData['mac'])->first());
-        /*$data = AlatParkirRepo::where('mac', $reqData['mac'])->first();
-        if(is_null($data))
-        {
-            return response()->json(array('cek' => false));
-        }else
-        {
-            if($data['mode'] == 2)
-            {
-                return response()->json(array('cek' => true));
-            }else
-            {
-                return response()->json(array('cek' => false));
-            }
-        }*/
-    }
-
-    public function testCapture()
-    {
-        $imagename = Str::random(60).".jpg";
-        shell_exec("ffmpeg -y -i rtsp://admin:admin123@192.168.1.103:8554/unicast -vframes 1 ".$pathcapture.$imagename);
     }
 }

@@ -66,16 +66,27 @@ class Mahasiswa extends Controller
             'nama_pengguna' => ['required', 'string', 'max:255'],
         ]);
     }
-
-    protected function validatorCrud(array $data)
+    
+    protected function validatorCrud(array $data, $tipe)
     {
-        return Validator::make($data,[
-            'nim_nip' => ['required', 'string', 'max:60'],
-            'nama_pengguna' => ['required', 'string', 'max:40'],
-            'alamat' => ['required', 'string', 'max:255'],
-            'cid' => ['required', 'string', 'max:20'],
-            'foto' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048']
-        ]);
+        if($tipe){
+            return Validator::make($data,[
+                'nim_nip' => ['required', 'numeric'],
+                'nama_pengguna' => ['required', 'string', 'max:40'],
+                'alamat' => ['required', 'string', 'max:255'],
+                'cid' => ['required', 'string', 'max:20'],
+                'foto' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+                'password' => ['required', 'string', 'min:8', 'confirmed'],
+            ]);
+        }else{
+            return Validator::make($data,[
+                'nim_nip' => ['required', 'numeric'],
+                'nama_pengguna' => ['required', 'string', 'max:40'],
+                'alamat' => ['required', 'string', 'max:255'],
+                'cid' => ['required', 'string', 'max:20'],
+                'foto' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            ]);
+        }
     }
 
     protected function tambahQuery(array $data)
@@ -88,6 +99,7 @@ class Mahasiswa extends Controller
             'alamat' => $data['alamat'],
             'fakultas' => $data['fakultas'],
             'foto' => $data['foto'],
+            'password' => Hash::make($data['password']),
         ]);
     }
 
@@ -112,6 +124,7 @@ class Mahasiswa extends Controller
         if(is_null($data['fakultas']) == false) $dataku['fakultas'] = $data['fakultas'];
         if(is_null($data['alamat']) == false) $dataku['alamat'] = $data['alamat'];
         if(is_null($data['foto']) == false) $dataku['foto'] = $data['foto'];
+        if($data['password'] != "") $dataku['password'] = Hash::make($data['password']);
         return $penggunaRepo->where('id', $data['id'])->update($dataku);
     }
 
@@ -127,7 +140,7 @@ class Mahasiswa extends Controller
 
     public function tambah(Request $request)
     {
-        $this->validatorCrud($request->all())->validate();
+        $this->validatorCrud($request->all(), 1)->validate();
         //if($this->debugging) var_dump($request->all());
         $dataReq = $request->all();
         $file_foto = $request->file('foto');
@@ -147,10 +160,6 @@ class Mahasiswa extends Controller
         {
             if($this->tambahQuery($dataReq))
             {
-                /*$data['mode'] = 1;
-                $data['user'] = $request->nama_pengguna;
-                $request->session()->flash('status', $data);
-                return redirect()->route('mahasiswa');*/
                 return $this->notificationData(1, $request->nama_pengguna, 'TAMBAH', 'mahasiswa', $request);
             }else
             {
@@ -161,7 +170,7 @@ class Mahasiswa extends Controller
 
     public function edit(Request $request)
     {
-        $this->validatorCrud($request->all())->validate();
+        $this->validatorCrud($request->all(), $request->password == "" &&  $request->password_confirmation == "" ? 0 : 1)->validate();
         if($this->debugging)
         {
             var_dump($request->all());
@@ -191,7 +200,7 @@ class Mahasiswa extends Controller
 
     public function tampilan_edit(Request $request)
     {
-        $dataedit['mahasiswa'] = PenggunaRepo::where('id',$request->id_mahasiswa)->first();
+        $dataedit['mahasiswa'] = PenggunaRepo::where('id',$request->id_mahasiswa)->firstOrFail();
         return $this->redirectTo($this->pathedit, $dataedit);
     }
 

@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>MONTIR</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="{{ url('bootstrap/css/bootstrap.min.css') }}" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href=" {{ url('/css/users/custom_header.css') }} ">
     <!--<link rel="stylesheet" href="{{ url('/fonts/css/fontawesome.css') }}">-->
     @yield('custom_css')
@@ -19,11 +20,15 @@
             </div>
             <div class="list-group list-group-flush">
                 <a href="{{ route('dashboard') }}" class="list-group-item list-group-item-action bg-light" id="menu_dashboard">Dashboard</a>
+                @if (Auth::user()->access_id == 1)
+                    <a href="{{ route('mahasiswa') }}" class="list-group-item list-group-item-action bg-light" id="menu_mahasiswa">Mahasiswa</a>
+                    <a href="{{ route('pegawai') }}" class="list-group-item list-group-item-action bg-light" id="menu_pegawai">Pegawai</a>
+                    <a href="{{ route('operator') }}" class="list-group-item list-group-item-action bg-light" id="menu_operator">Operator</a>
+                @endif
                 <a href="{{ route('transaksi') }}" class="list-group-item list-group-item-action bg-light" id="menu_transaksi">Transaksi</a>
-                <a href="{{ route('mahasiswa') }}" class="list-group-item list-group-item-action bg-light" id="menu_mahasiswa">Mahasiswa</a>
-                <a href="{{ route('pegawai') }}" class="list-group-item list-group-item-action bg-light" id="menu_pegawai">Pegawai</a>
-                <a href="{{ route('tempatparkir') }}" class="list-group-item list-group-item-action bg-light" id="menu_parkir">Parkir</a>
-                <a href="{{ route('tempatparkir') }}" class="list-group-item list-group-item-action bg-light" id="menu_parkir">Camera</a>
+                <a href="{{ route('tempatparkir') }}" class="list-group-item list-group-item-action bg-light" id="menu_parkir">Tempat Parkir</a>
+                <a href="{{ route('alat_parkir') }}" class="list-group-item list-group-item-action bg-light" id="menu_alatparkir">Alat Parkir</a>
+                <a href="{{ route('cameraparkir') }}" class="list-group-item list-group-item-action bg-light" id="menu_camera">Camera</a>
             </div>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -46,7 +51,7 @@
                                 Hello, {{ Auth::user()->name }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="{{ route('login') }}">Profile</a>
+                                <a class="dropdown-item" href="{{ route('profile') }}">Profile</a>
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                                     document.getElementById('logout-form').submit();">
@@ -99,9 +104,14 @@
         </div>
     </footer>
     <!-- JAVASCRIPT -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <!--<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>-->
+    <script src="{{ url('js/jquery/v3.4.1/jquery-3.4.1.slim.min.js') }}" ></script>
+    <script src="{{ url('js/propper/v1.16.0/popper.min.js') }}"></script>
+    <script src="{{ url('js/bootstrap/v4.4.1/bootstrap.min.js') }}"></script>
+    <script src="{{ url('js/leaflet/v1.6.0/leaflet.js') }}"></script>
+    <script src="{{ url('js/home/custom_header.js') }}"></script>
     <script src="{{ url('js/users/custom_header.js') }}"></script>
     @yield('custom_js')
     <script src="{{ url('js/users/control_menu_navbar.js') }}"></script>

@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('notelp');
             $table->string('username')->unique();
             $table->string('password');
+            $table->boolean('verifikasi');
             $table->timestamp('akun_verified_at')->nullable();
             $table->bigInteger('access_id');
             $table->rememberToken();

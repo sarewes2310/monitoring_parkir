@@ -4,12 +4,12 @@ function submitCek() {
 	console.log(data);
 }
 
-var socket = io('127.0.0.1:8080');
+var socket = io(server);
 socket.on('start', function(cou) {
 	var container = document.getElementById('hasil_cari');
 	var divSocket;
 	var div = document.createElement('div');
-	var html = '<img id="view_livecam" style="margin:auto">';
+	var html = '<img id="view_livecam" style="margin:auto;width:100%">';
 	div.innerHTML = html;
 	var image = div.getElementsByTagName('img')[0];
 	//var image = $('#view_livecam');
@@ -17,7 +17,7 @@ socket.on('start', function(cou) {
 		divSocket.disconnect();
 	}
 	console.log(this.value);
-	divSocket = io('127.0.0.1:8080' + '/cam2');
+	divSocket = io(server + '/cam' + path_live_cam);
 	divSocket.on('data', function(data) {
 		var bytes = new Uint8Array(data);
 		image.src = 'data:image/jpeg;base64,' + base64ArrayBuffer(bytes);

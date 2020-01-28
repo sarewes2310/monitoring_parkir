@@ -80,6 +80,7 @@ class RegisterController extends Controller
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
             'access_id' => 1,
+            'verifikasi' => 0,
         ]);
     }
 }

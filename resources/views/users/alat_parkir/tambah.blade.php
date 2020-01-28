@@ -27,14 +27,22 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group col-md-12">
-                          <label for="tempatparkir_id">Pilih Posisi Tempat Parkir</label>
-                          <select id="tempatparkir_id" name="tempatparkir_id" class="form-control">
-                            <option selected>Choose...</option>
-                            @foreach ($tempat_parkir as $item)
-                                <option value="{{ $item->id }}">{{ $item->nama_tempat_parkir }}</option>
-                            @endforeach
-                          </select>
+                        <div class="form-group col-md-6">
+                            <label for="tempatparkir_id">Pilih Posisi Tempat Parkir</label>
+                            <select id="tempatparkir_id" name="tempatparkir_id" class="form-control">
+                                <option selected>Choose...</option>
+                                @foreach ($tempat_parkir as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama_tempat_parkir }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="tipe">Pilih Jenis Alat Parkir</label>
+                            <select id="tipe" name="tipe" class="form-control" required>
+                                <option selected>Choose...</option>
+                                <option value="1">Pintu Masuk</option>
+                                <option value="2">Pintu Keluar</option>
+                            </select>
                         </div>
                     </div>
 
@@ -73,6 +81,5 @@
 @endsection
 
 @section('custom_js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-    <script src="{{ url('js/users/custom_page_parkir.js') }}"></script>
+    <script src="{{ url('js/users/custom_page_alat_parkir.js') }}"></script>
 @endsection

@@ -15,35 +15,40 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 // ROUTE HOMEPAGE
-Route::group(['prefix' => ''], function () {
-    Route::get('', function () {
-        return view('home/index');
-    })->name('home');
-    Route::get('loginv2', function () {
-        return view('home/login');
-    })->name('loginv2');
-    Route::get('daftar', function () {
-        return view('home/register');
-    })->name('daftar');
-    Route::get('test', function () {
-        $imagename = Hash::make(Str::random(60)).".jpg";
-        shell_exec("ffmpeg -y -i rtsp://admin:admin123@192.168.1.102:8554/unicast -vframes 1 E:/xampp/htdocs/monitoring_parkir/storage/app/public/data_file/parkir/".$imagename);
-    });
-    Route::get('timetest', function () {
-        date_default_timezone_set("Asia/Jakarta");
-        $date = date("Y-m-d \t H:i:s");
-        var_dump($date);
-        //$time = new DateTime();
-       // echo $time->format('Y-m-d \t h:i:s');
-    });
-    Route::group(['prefix' => 'live_cam'], function () {
+Route::middleware(['guest'])->group(function(){
+    Route::group(['prefix' => ''], function () {
         Route::get('', function () {
-            return view('home/live_cam');
-        })->name('live_cam'); 
-        Route::get('cari', 'Users\Parkir@cariLiveCam')->name('cari_live_cam'); 
+            return view('home/index');
+        })->name('home');
+        Route::get('loginv2', function () {
+            return view('home/login');
+        })->name('loginv2');
+        Route::get('daftar', function () {
+            return view('home/register');
+        })->name('daftar');
+        Route::get('test', function () {
+            $imagename = Hash::make(Str::random(60)).".jpg";
+            exec("ffmpeg -rtsp_flags listen -timeout 30 -y -i rtsp://admin:admin123@192.168.1.102:8554/unicast -vframes 1 E:/xampp/htdocs/monitoring_parkir/storage/app/public/data_file/parkir/".$imagename, $output, $return);
+            if($return != 0){
+                return "error";
+            }
+        });
+        Route::get('timetest', function () {
+            date_default_timezone_set("Asia/Jakarta");
+            $date = date("Y-m-d \t H:i:s");
+            var_dump($date);
+            //$time = new DateTime();
+           // echo $time->format('Y-m-d \t h:i:s');
+        });
+    
+        Route::group(['prefix' => 'live_cam'], function () {
+            Route::get('', function () {
+                return view('home/live_cam', ['test' => 'jancok']);
+            })->name('live_cam'); 
+            Route::post('cari', 'Users\Parkir@cariLiveCam')->name('cari_live_cam'); 
+        });
     });
 });
-
 
 Route::middleware(['auth'])->group(function(){
     // ROUTE ACCOUNT USER
@@ -54,7 +59,32 @@ Route::middleware(['auth'])->group(function(){
         Route::post('hapus', 'Users\Dashboard@hapusAdmin')->name('hapusAdmin');
         Route::post('verifikasi', 'Users\Dashboard@verifikasiAdmin')->name('verifikasiAdmin');
         Route::get('dashboard/cari', 'Users\Dashboard@cariAdmin')->name('cariAdmin');
+        Route::get('profile', 'Users\Dashboard@profile')->name('profile');
+        Route::post('profile', 'Users\Dashboard@saveprofile')->name('saveprofile');
+
+        Route::get('test_session', function () {
+            return Auth::user();
+        });
     
+        // ROUTE PREFIX OPERATOR
+        Route::group(['prefix' => 'operator'], function () {
+
+            // TAMPIL DATA
+            Route::get('', 'Users\Operator@index')->name('operator');
+            Route::get('dashboard/cari', 'Users\Operator@cari')->name('cariOperator');
+            
+            // TAMBAH DATA
+            Route::get('tambah', 'Users\Operator@tampilan_tambah')->name('tambah_operator');
+            Route::post('tambah', 'Users\Operator@tambah')->name('simpan_tambah_operator');
+            
+            // EDIT DATA
+            Route::get('edit', 'Users\Operator@tampilan_edit')->name('edit_operator');
+            Route::post('edit', 'Users\Operator@edit')->name('simpan_edit_operator');
+    
+            // HAPUS DATA
+            Route::post('hapus', 'Users\Operator@hapus')->name('hapus_operator');
+        });
+        
         // ROUTE PREFIX TRANSAKSI
         Route::group(['prefix' => 'transaksi'], function () {
     
@@ -151,8 +181,29 @@ Route::middleware(['auth'])->group(function(){
             Route::post('hapus', 'Users\AlatParkir@hapus')->name('hapus_alat_parkir');
 
         });
+
+        // ROUTE PREFIX CAMERA PARKIR
+        Route::group(['prefix' => 'cameraparkir'], function () {
+    
+            // TAMPIL DATA
+            Route::get('', 'Users\CameraParkir@index')->name('cameraparkir');
+            Route::get('cari', 'Users\CameraParkir@cari')->name('cariCameraparkir');
+            
+            // TAMBAH DATA
+            Route::get('tambah', 'Users\CameraParkir@tampilan_tambah')->name('tambah_cameraparkir');
+            Route::post('tambah', 'Users\CameraParkir@tambah')->name('simpan_tambah_cameraparkir');
+            
+            // EDIT DATA
+            Route::get('edit', 'Users\CameraParkir@tampilan_edit')->name('edit_cameraparkir');
+            Route::post('edit', 'Users\CameraParkir@edit')->name('simpan_edit_cameraparkir');
+    
+            // HAPUS DATA
+            Route::post('hapus', 'Users\CameraParkir@hapus')->name('hapus_cameraparkir');
+
+        });
     });
 });
+
 Route::get('mode', 'Users\AlatParkir@getMode')->name('getmode_alat_parkir');
 Route::get('testchangemode', 'Users\Parkir@changeModeAP')->name('gantimode_alat_parkir');
 //Route::get('testcapture', 'Users\AlatParkir@testCapture')->name('captureimage');

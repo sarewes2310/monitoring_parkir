@@ -1,7 +1,6 @@
 @extends('home.header')
 
 @section('custom_css')
-    
 @endsection
 
 @section('content')
@@ -32,6 +31,7 @@
             <div class="col-lg-4">
                 <div class="d-flex justify-content-center p-2">
                     <div class="#">
+			<img src="{{ url('assets/header/fitur_1.png') }}" class="img-fitur">
                         <h6 class="card-subtitle mb-2 text-muted text-center">Camera Realtime</h6>
                         <p class="card-text text-center">Tempat parkir akan dipasangkan camera untuk menampilkan visualisasi dari tempat parkir secara realtime</p>
                     </div>
@@ -40,7 +40,7 @@
             <div class="col-lg-4">
                 <div class="d-flex justify-content-center p-2">
                     <div class="">
-                        <i class="fas fa-camera"></i>
+			<img src="{{ url('assets/header/fitur_2.png') }}" class="img-fitur">
                         <h6 class="card-subtitle mb-2 text-muted text-center">RFID Tag</h6>
                         <p class="card-text text-center">Tempat parkir menggunakan kartu RFID untuk masuk ke dalam tempat parkir sehingga mengurangi penggunaan kertas.</p>
                     </div>
@@ -49,6 +49,7 @@
             <div class="col-lg-4">
                 <div class="d-flex justify-content-center p-2">
                     <div class="#">
+			<img src="{{ url('assets/header/fitur_3.png') }}" class="img-fitur">
                         <h6 class="card-subtitle mb-2 text-muted text-center">Laporan</h6>
                         <p class="card-text text-center">Data pengguna dari tempat parkir ditampilkan dalam sebuah file yang dapat di unduh sehingga memudahkan dalam memanajemen tempat parkir</p>
                     </div>
@@ -75,6 +76,9 @@
     </div>
 @endsection
 
+@section('custom_js')
+    <script src="js/home/map_header.js"></script>
+@endsection
 @section('custom_js')
     <script src="js/home/map_header.js"></script>
 @endsection

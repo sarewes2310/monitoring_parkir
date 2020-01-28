@@ -19,6 +19,6 @@ class PenggunaRepo extends Model
      * @var array
      */
     protected $fillable = [
-        'fakultas', 'statuspengguna_id', 'nama_pengguna', 'cid', 'nim_nip', 'alamat', 'foto', 'id'
+        'fakultas', 'statuspengguna_id', 'nama_pengguna', 'cid', 'nim_nip', 'alamat', 'foto', 'id', 'password'
     ];
 }

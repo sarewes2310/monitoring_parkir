@@ -20,7 +20,7 @@ class AlatParkirRepo extends Model
      * @var array
      */
     protected $fillable = [
-        'mac', 'mode', 'token'
+        'mac', 'mode', 'token', 'tipe'
     ];
 
     public function rolesku()

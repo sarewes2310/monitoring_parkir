@@ -38,7 +38,7 @@
                         <tr>
                             <th scope="col">No</th>
                             <th scope="col">MAC ADDRESS</th>
-                            <th scope="col">Access Token</th>
+                            <th scope="col">Nama Tempat Parkir</th>
                             <th scope="col">Mode</th>
                             <th scope="col">Aksi</th>
                         </tr>
@@ -53,7 +53,7 @@
                                 <tr>
                                     <th scope="row">{{ $loop->index + 1 }}</th>
                                     <td>{{ $item->mac }}</td>
-                                    <td>{{ $item->token }}</td>
+                                    <td>{{ $item->nama_tempat_parkir }}</td>
                                     <td>{{ $item->mode }}</td>
                                     <td>
                                         <a class="badge badge-warning text-wrap mon-f-badge" href="{{ route('edit_alat_parkir') }}"
@@ -63,9 +63,9 @@
                                         </a>
                                         <form id="edit-form" action="{{ route('edit_alat_parkir') }}" method="GET" style="display: none;">
                                             @csrf
-                                            <input type="text" name="id_alat_parkir" value="{{ $item->id }}">
+                                            <input type="text" name="id_alat_parkir" value="{{ $item->alatparkir_id }}">
                                         </form>
-                                        <a class="badge badge-danger text-wrap text-white mon-f-badge"  data-toggle="modal" data-target="#hapusModal" onclick="return getID('{{ $item->id }}','{{ $item->mac }}')">
+                                        <a class="badge badge-danger text-wrap text-white mon-f-badge"  data-toggle="modal" data-target="#hapusModal" onclick="return getID('{{ $item->alatparkir_id }}','{{ $item->mac }}')">
                                             Hapus
                                         </a>
                                     </td>
@@ -107,5 +107,5 @@
 @endsection
 
 @section('custom_js')
-    <script src="{{ url('js/users/custom_page_parkir.js') }}"></script>
+    <script src="{{ url('js/users/custom_page_alat_parkir.js') }}"></script>
 @endsection

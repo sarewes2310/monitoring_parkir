@@ -55,7 +55,7 @@
                     <div class="center_size_login_page">
                         <p class="text-center">
                             Belum mempunyai akun daftar pada halaman 
-                            <a class="badge btn-grad-purple text-wrap">REGISTER</a> (<b>KHUSUS PEGAWAI PARKIR</b>).
+                            <a class="badge btn-grad-purple text-wrap" href="{{ route('register') }}">REGISTER</a> (<b>KHUSUS PEGAWAI PARKIR</b>).
                         </p>    
                     </div>
                 </div>

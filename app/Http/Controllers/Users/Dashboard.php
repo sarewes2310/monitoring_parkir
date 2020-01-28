@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Users;
 use App\Repositories\PenggunaRepo;
+use App\Repositories\ParkirRepo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class Dashboard extends Controller
 {
     protected $path = 'users.dashboard';
+    protected $debugging = false;
 
     protected function inisialisasi()
     {
@@ -62,6 +65,16 @@ class Dashboard extends Controller
         $data['pegawai'] = PenggunaRepo::where('statuspengguna_id', 2)->count();
         #$data['mode'] = null;
         #$data['user'] = null;
+        if(Auth::user()->access_id == 2)
+        {
+            $data += [
+                'ktp' => ParkirRepo::where('verifikasi', 0)->whereDate('created_at', date('Y-m-d'))->count(),
+                'dph' => ParkirRepo::whereDate('created_at', date('Y-m-d'))->count(),
+                'rdp' => ParkirRepo::count(),
+                'chart_mahasiswa' => DB::table('pengguna')->join('parkir', 'pengguna.id', 'parkir.pengguna_id')->where('statuspengguna_id', 1)->count(),
+                'chart_pegawai'   => DB::table('pengguna')->join('parkir', 'pengguna.id', 'parkir.pengguna_id')->where('statuspengguna_id', 2)->count(),
+            ];
+        }
         return $data;
     }
 
@@ -115,10 +128,12 @@ class Dashboard extends Controller
         }
         
         date_default_timezone_set("Asia/Jakarta");
-        $users->akun_verified_at = date("Y-m-d \t H:i:s");
+        $input['akun_verified_at'] = date("Y-m-d H:i:s");
+        $input['verifikasi'] = 1;   
+        //return $data;
 
         // UPDATE VERIFIKASI USER
-        if($this->verifikasi($users))
+        if($this->verifikasi($users, $input))
         {
             $data['mode'] = 1;
             $data['user'] = $reqData['nameVerifData'];
@@ -134,13 +149,64 @@ class Dashboard extends Controller
         }
     }
 
-    protected function verifikasi(Users $users)
+    protected function verifikasi(Users $users, array $data)
     {
-        return $users::save();
+        return $users::where('id', $users->id)->update($data);
     }
 
     protected function cek(array $data)
     {
         return Users::find($data['idVerifData']);
+    }
+
+    protected function validatorCrud(array $data, $tipe)
+    {
+        if($tipe){
+            return Validator::make($data,[
+                'username' => ['required', 'string', 'max:40'],
+                'name' => ['required', 'string', 'max:40'],
+                'notelp' => ['required', 'string', 'min:11', 'max:16'],
+                'password' => ['required', 'string', 'min:8', 'confirmed'],
+            ]);
+        }else{
+            return Validator::make($data,[
+                'username' => ['required', 'string', 'max:40'],
+                'name' => ['required', 'string', 'max:40'],
+                'notelp' => ['required', 'string', 'min:11', 'max:16'],
+            ]);
+        }
+    }
+
+    protected function editQuery(array $data)
+    {
+        $dataku = [];
+        //q$penggunaRepo = PenggunaRepo::where('id', $data['id'])->first();
+        if(is_null($data['name']) == false) $dataku['name'] = $data['name'];
+        if(is_null($data['username']) == false) $dataku['username'] = $data['username'];
+        if(is_null($data['notelp']) == false) $dataku['notelp'] = $data['notelp'];
+        if($data['password'] != "") $dataku['password'] = Hash::make($data['password']);
+        return Users::where('id', $data['id'])->update($dataku);
+    }
+
+    public function profile()
+    {
+        //$reqData = Auth::user();
+        $data['profile'] = Auth::user();
+        return view('users.profile', $data);
+    }
+
+    public function saveprofile(Request $request)
+    {
+        $this->validatorCrud($request->all(), $request->password == "" &&  $request->password_confirmation == "" ? 0 : 1)->validate();
+        if($this->debugging)
+        {
+            var_dump($request->all());
+            var_dump(is_null($request->foto));
+        }else
+        {
+            $dataReq = $request->all();
+            if($this->editQuery($dataReq)) return \redirect('user/dashboard');
+            else return $this->notificationData(404, $request->name, 'EDIT DATA', 'operator', $request);
+        }
     }
 }
