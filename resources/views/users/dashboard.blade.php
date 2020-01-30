@@ -31,7 +31,7 @@
                         {{ $rdp }}   
                     @endslot
                     @slot('chart_mahasiswa')
-                        {{ $chart_mahasiswa }}   
+                        {{ $mahasiswa }}   
                     @endslot
                     @slot('chart_pegawai')
                         {{ $chart_pegawai }}   
@@ -196,14 +196,14 @@
     <script src="{{ url('js/users/chart.min.js') }}"></script>    
     <script>
         var ctx = document.getElementById('myChart');
-        console.log('@json($chart_mahasiswa)');
+        console.log('@json($mahasiswa)');
         var myChart = new Chart(ctx, {
             type: 'pie',
             data: {
                 labels: ['Mahasiswa', 'Pegawai'],
                 datasets: [{
                     label: '# of Votes',
-                    data: [`{{ $chart_mahasiswa }}`, `{{ $chart_pegawai }}`,],
+                    data: [`{{ $mahasiswa }}`, `{{ $chart_pegawai }}`,],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
