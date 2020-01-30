@@ -194,6 +194,7 @@
 @section('custom_js')
     <script src="{{ url('js/users/custom_page_dashboard.js') }}"></script>
     <script src="{{ url('js/users/chart.min.js') }}"></script>    
+    @if (Auth::user()->access_id == 2)
     <script>
         var ctx = document.getElementById('myChart');
         console.log('@json($mahasiswa)');
@@ -220,4 +221,5 @@
             }
         });
     </script>
+    @endif
 @endsection

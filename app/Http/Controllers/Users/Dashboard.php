@@ -71,8 +71,8 @@ class Dashboard extends Controller
                 'ktp' => ParkirRepo::where('verifikasi', 0)->whereDate('created_at', date('Y-m-d'))->count(),
                 'dph' => ParkirRepo::whereDate('created_at', date('Y-m-d'))->count(),
                 'rdp' => ParkirRepo::count(),
-                'chart_mahasiswa' => DB::table('pengguna')->join('parkir', 'pengguna.id', 'parkir.pengguna_id')->where('statuspengguna_id', 1)->count(),
-                'chart_pegawai'   => DB::table('pengguna')->join('parkir', 'pengguna.id', 'parkir.pengguna_id')->where('statuspengguna_id', 2)->count(),
+                'chart_mahasiswa' => DB::table('pengguna')->join('parkir', 'pengguna.id', 'parkir.pengguna_id')->where('statuspengguna_id', 1)->whereDate('parkir.created_at', date('Y-m-d'))->count(),
+                'chart_pegawai'   => DB::table('pengguna')->join('parkir', 'pengguna.id', 'parkir.pengguna_id')->where('statuspengguna_id', 2)->whereDate('parkir.created_at', date('Y-m-d'))->count(),
             ];
         }
         return $data;
