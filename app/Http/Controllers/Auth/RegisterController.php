@@ -79,7 +79,7 @@ class RegisterController extends Controller
             'notelp' => $data['username'],
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
-            'access_id' => 1,
+            'access_id' => 2,
             'verifikasi' => 0,
         ]);
     }
