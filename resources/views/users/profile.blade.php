@@ -7,7 +7,7 @@
 @endsection
 @section('content')
     <div class="container">
-        <form method="POST" action="{{ route('saveprofile') }}" class="was-validated">
+        <form method="POST" action="{{ route('saveprofile') }}" class="#">
             <div class="row justify-content-md-center">
                 <div class="col-lg-6">
                     @csrf
@@ -46,6 +46,20 @@
                             @enderror
                         </div>
                     </div>
+
+                    @if (Auth::user()->access_id == 2)
+                        <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                                <label for="tempatparkir_id">Pilih Posisi Tugas</label>
+                                <select id="tempatparkir_id" name="tempatparkir_id" class="form-control">
+                                    <option selected>Choose...</option>
+                                    @foreach ($tempat_parkir as $item)
+                                        <option value="{{ $item->id }}" @if ($item->id == $profile->tempat_parkir_id) selected @endif>{{ $item->nama_tempat_parkir }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    @endif
 
                     <!-- INPUT PASSWORD -->
                     <div class="form-row">
@@ -102,6 +116,10 @@
                                         <td>Input Nomer Telepon</td>
                                         <td>Berisi Nomer Telepon dari Operator.</td>
                                     </tr>
+                                    <tr id="ket_tempat_tugas">
+                                        <td>Input Posisi Tugas</td>
+                                        <td>Berisi nama tempat parkir yang dijaga oleh Operator.</td>
+                                    </tr>
                                     <tr id="ket_password">
                                         <td>Input Password</td>
                                         <td>Berisi password dari Operator.</td>
@@ -117,4 +135,7 @@
 @endsection
 
 @section('custom_js')
+    <script src="text/js">
+
+    </script>
 @endsection

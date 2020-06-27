@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class Parkir extends Controller
 {
@@ -34,6 +35,7 @@ class Parkir extends Controller
                 ->join('pengguna', 'parkir.pengguna_id', '=', 'pengguna.id')
                 ->join('tempat_parkir', 'parkir.tempatparkir_id', '=', 'tempat_parkir.id')
                 ->where('parkir.verifikasi', 0)
+                ->where('parkir.tempatparkir_id', Auth::user()->tempat_parkir_id)
                 ->select('pengguna.nama_pengguna','pengguna.nim_nip', 'parkir.verifikasi', 'parkir.id', 'tempat_parkir.nama_tempat_parkir', 'parkir.foto', 'parkir.tempatparkir_id')
                 ->paginate(15);
         //if(count($data['parkir']) > 0) $data['kosong'] = false;
@@ -72,6 +74,7 @@ class Parkir extends Controller
             ->join('pengguna', 'parkir.pengguna_id', '=', 'pengguna.id')
             ->join('tempat_parkir', 'parkir.tempatparkir_id', '=', 'tempat_parkir.id')
             ->where('parkir.verifikasi', 0)
+            ->where('parkir.tempatparkir_id', Auth::user()->tempat_parkir_id)
             ->where('nim_nip', 'like', ''.$data['inputCari'].'%')
             ->orWhere('cid', 'like', ''.$data['inputCari'].'%')
             ->select('pengguna.nama_pengguna','pengguna.nim_nip', 'parkir.verifikasi', 'parkir.id', 'tempat_parkir.nama_tempat_parkir', 'parkir.foto', 'parkir.tempatparkir_id');

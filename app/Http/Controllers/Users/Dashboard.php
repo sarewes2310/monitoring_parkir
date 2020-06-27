@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Users;
 use App\Repositories\PenggunaRepo;
 use App\Repositories\ParkirRepo;
+use App\Repositories\TempatParkirRepo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -167,6 +168,7 @@ class Dashboard extends Controller
                 'name' => ['required', 'string', 'max:40'],
                 'notelp' => ['required', 'string', 'min:11', 'max:16'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
+                'tempatparkir_id' => ['required', 'exists:App\Repositories\TempatParkirRepo,id']
             ]);
         }else{
             return Validator::make($data,[
@@ -184,6 +186,7 @@ class Dashboard extends Controller
         if(is_null($data['name']) == false) $dataku['name'] = $data['name'];
         if(is_null($data['username']) == false) $dataku['username'] = $data['username'];
         if(is_null($data['notelp']) == false) $dataku['notelp'] = $data['notelp'];
+        if(is_null($data['tempatparkir_id']) == false) $dataku['tempat_parkir_id'] = $data['tempatparkir_id'];
         if($data['password'] != "") $dataku['password'] = Hash::make($data['password']);
         return Users::where('id', $data['id'])->update($dataku);
     }
@@ -192,6 +195,7 @@ class Dashboard extends Controller
     {
         //$reqData = Auth::user();
         $data['profile'] = Auth::user();
+        $data['tempat_parkir'] = TempatParkirRepo::all();
         return view('users.profile', $data);
     }
 
