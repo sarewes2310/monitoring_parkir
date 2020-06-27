@@ -20,22 +20,9 @@
                     @endslot
                 @endcomponent
             @else
-                @component('users.operator_menu') 
-                    @slot('ktp')
-                        {{ $ktp }}   
-                    @endslot
-                    @slot('dph')
-                        {{ $dph }}   
-                    @endslot
-                    @slot('rdp')
-                        {{ $rdp }}   
-                    @endslot
-                    @slot('chart_mahasiswa')
-                        {{ $chart_mahasiswa }}   
-                    @endslot
-                    @slot('chart_pegawai')
-                        {{ $chart_pegawai }}   
-                    @endslot
+                @component('users.operator_menu',['TP' => $dataTP, 
+                                                'DPH' => $dataDPH,
+                                                'PC' => $dataPC]) 
                 @endcomponent
             @endif
             
@@ -196,30 +183,125 @@
     <script src="{{ url('js/users/chart.min.js') }}"></script>    
     @if (Auth::user()->access_id == 2)
     <script>
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+        }
+        function generateColor(length, o) {
+            output = [];
+            for (let index = 0; index < length; index++) {
+                let random_color = getRandomInt(0,256);
+                output[index] = 'rgba('+getRandomInt(0,256)+', '+getRandomInt(0,256)+', '+getRandomInt(0,256)+', '+o+')';
+            }
+            return output
+        }
         var ctx = document.getElementById('myChart');
-        console.log('@json($chart_mahasiswa)');
+        var data = JSON.parse(@json($dataPC));
+        var data_length = data.length;
+        var chart_data = [];
+        var chart_labels = [];
+        for (let index = 0; index < data_length; index++) {
+            chart_data[index] = data[index].count;
+            chart_labels[index] = data[index].nama;
+        }
+
         var myChart = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: ['Mahasiswa', 'Pegawai'],
+                labels: chart_labels,
                 datasets: [{
-                    label: '# of Votes',
-                    data: [`{{ $chart_mahasiswa }}`, `{{ $chart_pegawai }}`,],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                    ],
-                    borderWidth: 1
+                    label: 'Detail Rekap Keseluruhan Data Parkir Hari ini',
+                    data: chart_data,
+                    backgroundColor: generateColor(data_length, '0.2'),
+                    borderWidth: 0
                 }]
             },
             options: {
                 responsive: true
             }
         });
+
+        var ctx2 = document.getElementById('grafikchart');
+        var data2 = JSON.parse(@json($dataPC));
+        var data_length2 = data2.length;
+        var chart_data2 = [];
+        var chart_labels2 = [];
+        for (let index = 0; index < data_length2; index++) {
+            chart_data2[index] = data2[index].count;
+            chart_labels2[index] = data2[index].nama;
+        }
+
+        var MONTHS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+		var config = {
+			type: 'line',
+			data: {
+				labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
+				datasets: [{
+					label: 'My First dataset',
+					backgroundColor: window.chartColors.red,
+					borderColor: window.chartColors.red,
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor()
+					],
+					fill: false,
+				}, {
+					label: 'My Second dataset',
+					fill: false,
+					backgroundColor: window.chartColors.blue,
+					borderColor: window.chartColors.blue,
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor()
+					],
+				}]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Line Chart'
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					x: {
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Month'
+						}
+					},
+					y: {
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Value'
+						}
+					}
+				}
+			}
+		};
+
+        var grafikChart = new Chart(ctx, config);
+        
     </script>
     @endif
 @endsection

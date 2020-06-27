@@ -27,5 +27,10 @@ class TempatParkirRepo extends Model
     {
         return $this->belongsToMany(AlatParkirRepo::class);
     }
+
+    public function parkir()
+    {
+        return $this->hasMany('App\Repositories\ParkirRepo', 'tempatparkir_id', 'id');
+    }
     
 }

@@ -11,6 +11,7 @@ use App\Repositories\TempatParkirRepo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class Dashboard extends Controller
 {
@@ -25,10 +26,11 @@ class Dashboard extends Controller
         $data += $this->inisialisasi_jumlah_pengguna();
         return $data;
     }
-
+    
     public function index() 
     {
         $data = $this->inisialisasi();
+        #return $data['dataTP'][0];
         return $this->redirectTo($data);
     }
 
@@ -68,15 +70,65 @@ class Dashboard extends Controller
         #$data['user'] = null;
         if(Auth::user()->access_id == 2)
         {
+            #var_dump($outtoarray);
+            $out = TempatParkirRepo::with(['parkir' => function ($query) {
+                $query->where('verifikasi', 0)->whereDate('created_at', date('Y-m-d'));
+            }])->get();
+            $dph = TempatParkirRepo::with(['parkir' => function ($query) {
+                $query->whereDate('created_at', date('Y-m-d'));
+            }])->get();
+            $pie_chart = [];
+            $line_chart = [];
+            foreach ($dph as $key => $value) {
+                $pie_chart[$key] = array(
+                    'count' => count($value->parkir),
+                    'nama' => $value->nama_tempat_parkir,
+                );
+                $line_chart[$key] = array(
+                    'date_count' => $this->generateDate([$value->id]),
+                    'nama' => $value->nama_tempat_parkir,
+                );
+            }
+            var_dump(date('N'));
             $data += [
-                'ktp' => ParkirRepo::where('verifikasi', 0)->whereDate('created_at', date('Y-m-d'))->count(),
-                'dph' => ParkirRepo::whereDate('created_at', date('Y-m-d'))->count(),
-                'rdp' => ParkirRepo::count(),
+                'dataDPH' => json_encode($dph),
+                'dataTP' => json_encode($out),
+                'dataPC' => json_encode($pie_chart),
+                #'rdp' => ParkirRepo::count(),
                 'chart_mahasiswa' => DB::table('pengguna')->join('parkir', 'pengguna.id', 'parkir.pengguna_id')->where('statuspengguna_id', 1)->whereDate('parkir.created_at', date('Y-m-d'))->count(),
                 'chart_pegawai'   => DB::table('pengguna')->join('parkir', 'pengguna.id', 'parkir.pengguna_id')->where('statuspengguna_id', 2)->whereDate('parkir.created_at', date('Y-m-d'))->count(),
             ];
         }
         return $data;
+    }
+
+    protected function generateDate(array $data)
+    {
+        $nowdate = date('N');
+        $output = [];
+        if($nowdate <= 7 && $nowdate != 1)
+        {    
+            $d = 0;
+            for ($i=$nowdate; $i > 0 ; $i--) { 
+                $output[$i] = ParkirRepo::where('tempatparkir_id', $data[0])->whereDate('created_at',
+                    Carbon::today()->addDays($d));
+                $d++;
+            }
+
+            $d = 0;
+            for ($i=$nowdate; $i <= 7 ; $i++) { 
+                $output[$i] = ParkirRepo::where('tempatparkir_id', $data[0])->whereDate('created_at',
+                    Carbon::today()->addDays($d));
+                $d++;
+            }
+        }else if($nowdate == 1)
+        {
+            for ($i=0; $i < 7 ; $i++) { 
+                $output[$i] = ParkirRepo::where('tempatparkir_id', $data[0])->whereDate('created_at',
+                    Carbon::today()->addDays($i));
+            }
+        }
+        return 0;
     }
 
     protected function ValidatorCariAdmin(array $data)
