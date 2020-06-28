@@ -30,7 +30,7 @@ class Dashboard extends Controller
     public function index() 
     {
         $data = $this->inisialisasi();
-        #return $data['dataTP'][0];
+        #return $this->generateDate([1]);
         return $this->redirectTo($data);
     }
 
@@ -84,16 +84,19 @@ class Dashboard extends Controller
                     'count' => count($value->parkir),
                     'nama' => $value->nama_tempat_parkir,
                 );
+            }
+            foreach ($dph as $key => $value) {
                 $line_chart[$key] = array(
                     'date_count' => $this->generateDate([$value->id]),
                     'nama' => $value->nama_tempat_parkir,
                 );
             }
-            var_dump(date('N'));
+            //var_dump($line_chart[0]['date_count']);
             $data += [
                 'dataDPH' => json_encode($dph),
                 'dataTP' => json_encode($out),
                 'dataPC' => json_encode($pie_chart),
+                'dataLC' => json_encode($line_chart),
                 #'rdp' => ParkirRepo::count(),
                 'chart_mahasiswa' => DB::table('pengguna')->join('parkir', 'pengguna.id', 'parkir.pengguna_id')->where('statuspengguna_id', 1)->whereDate('parkir.created_at', date('Y-m-d'))->count(),
                 'chart_pegawai'   => DB::table('pengguna')->join('parkir', 'pengguna.id', 'parkir.pengguna_id')->where('statuspengguna_id', 2)->whereDate('parkir.created_at', date('Y-m-d'))->count(),
@@ -104,31 +107,35 @@ class Dashboard extends Controller
 
     protected function generateDate(array $data)
     {
-        $nowdate = date('N');
+        $nowdate = 6;
         $output = [];
         if($nowdate <= 7 && $nowdate != 1)
         {    
             $d = 0;
             for ($i=$nowdate; $i > 0 ; $i--) { 
+                $dt = Carbon::today();
                 $output[$i] = ParkirRepo::where('tempatparkir_id', $data[0])->whereDate('created_at',
-                    Carbon::today()->addDays($d));
+                    $dt->subDays($d)->toDateString())->count();
                 $d++;
+                #var_dump($dt);
             }
-
+            
             $d = 0;
             for ($i=$nowdate; $i <= 7 ; $i++) { 
+                $dt = Carbon::today();
                 $output[$i] = ParkirRepo::where('tempatparkir_id', $data[0])->whereDate('created_at',
-                    Carbon::today()->addDays($d));
+                $dt->addDays($d)->toDateString())->count();
                 $d++;
             }
         }else if($nowdate == 1)
         {
             for ($i=0; $i < 7 ; $i++) { 
+                $dt = Carbon::today();
                 $output[$i] = ParkirRepo::where('tempatparkir_id', $data[0])->whereDate('created_at',
-                    Carbon::today()->addDays($i));
+                $dt->addDays($i)->toDateString())->count();
             }
         }
-        return 0;
+        return $output;
     }
 
     protected function ValidatorCariAdmin(array $data)

@@ -88,7 +88,7 @@
     <div class="col-lg-12">
         <div class="card shadow-sm">
             <div class="card-body">
-                <canvas id="grafikchart" width="400" height="400"></canvas>
+                <canvas id="grafikchart" width="400" height="240" style="height:80vh;"></canvas>
             </div>
         </div>
     </div>

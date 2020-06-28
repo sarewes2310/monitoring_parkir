@@ -201,77 +201,84 @@
         var data_length = data.length;
         var chart_data = [];
         var chart_labels = [];
+        var count_pc = 0;
         for (let index = 0; index < data_length; index++) {
             chart_data[index] = data[index].count;
             chart_labels[index] = data[index].nama;
+            if(data[index].count == 0) count_pc+=1;
         }
-
-        var myChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: chart_labels,
-                datasets: [{
-                    label: 'Detail Rekap Keseluruhan Data Parkir Hari ini',
-                    data: chart_data,
-                    backgroundColor: generateColor(data_length, '0.2'),
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true
-            }
-        });
+        console.table(chart_data);
+        if(count_pc == data_length)
+        {
+            var textb = ctx.getContext("2d");
+            textb.font = "24px Arial";
+            textb.fillText("Rekap data parkir hari ini kosong !!!", 10, 50);
+        }
+        else
+        {
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: chart_labels,
+                    datasets: [{
+                        label: 'Detail Rekap Keseluruhan Data Parkir Hari ini',
+                        data: chart_data,
+                        backgroundColor: generateColor(data_length, '0.4'),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                }
+            });
+        }
 
         var ctx2 = document.getElementById('grafikchart');
-        var data2 = JSON.parse(@json($dataPC));
+        var data2 = JSON.parse(@json($dataLC));
+        console.table(data2);
         var data_length2 = data2.length;
         var chart_data2 = [];
-        var chart_labels2 = [];
         for (let index = 0; index < data_length2; index++) {
-            chart_data2[index] = data2[index].count;
-            chart_labels2[index] = data2[index].nama;
+            //console.log(data2[index].date_count);
+            let line_color = generateColor(1, '0.4')[0];
+            chart_data2[index] = {
+                label: data2[index].nama,
+                backgroundColor: line_color,
+                borderColor: line_color,
+                data: [
+                    data2[index].date_count[1],
+                    data2[index].date_count[2],
+                    data2[index].date_count[3],
+                    data2[index].date_count[4],
+                    data2[index].date_count[5],
+                    data2[index].date_count[6],
+                    data2[index].date_count[7],
+                ],
+                fill: false,
+            };
         }
+        console.table(chart_data2);
 
         var MONTHS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 		var config = {
 			type: 'line',
 			data: {
 				labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
-				datasets: [{
-					label: 'My First dataset',
-					backgroundColor: window.chartColors.red,
-					borderColor: window.chartColors.red,
-					data: [
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor()
-					],
-					fill: false,
-				}, {
-					label: 'My Second dataset',
-					fill: false,
-					backgroundColor: window.chartColors.blue,
-					borderColor: window.chartColors.blue,
-					data: [
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor()
-					],
-				}]
+				datasets: chart_data2
 			},
 			options: {
 				responsive: true,
 				title: {
 					display: true,
-					text: 'Chart.js Line Chart'
+					text: 'Total Data Parkir Per-hari'
 				},
 				tooltips: {
 					mode: 'index',
@@ -286,21 +293,21 @@
 						display: true,
 						scaleLabel: {
 							display: true,
-							labelString: 'Month'
+							labelString: 'Day'
 						}
 					},
 					y: {
 						display: true,
 						scaleLabel: {
 							display: true,
-							labelString: 'Value'
+							labelString: 'Jumlah'
 						}
 					}
 				}
 			}
 		};
 
-        var grafikChart = new Chart(ctx, config);
+        var grafikChart = new Chart(ctx2, config);
         
     </script>
     @endif
