@@ -48,40 +48,43 @@
     </div>
 </div>-->
 <div class="row" style="margin-top: 1rem;margin-bottom: 1rem">
-
-    <div class="col-lg-6">
+    <div class="col-lg-12">
         <div class="card shadow-sm">
             <div class="card-body">
-                <canvas id="myChart" width="400" height="400"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-6">
-        <div class="card shadow-sm myactive" style="min-height: 100%">
-            <div class="card-body">
-                <h3 class="card-title"> Detail Rekap Keseluruhan Data Parkir Hari ini</h3>
-                <table class="table table-borderless text-white">
-                    <thead>
-                        <tr>
-                            <th scope="col">Nama Tempat Parkir</th>
-                            <th scope="col">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $outPC = json_decode($PC); 
-                            foreach ($outPC as $key => $value) {
-                                echo '
-                                <tr>
-                                    <td>'.$value->nama.'</td>
-                                    <td>'.$value->count.'</td>
-                                </tr>
-                                ';
-                            }
-                        @endphp
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <canvas id="myChart" width="400" height="400"></canvas>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm myactive" style="min-height: 100%">
+                            <div class="card-body">
+                                <h3 class="card-title"> Detail Rekap Keseluruhan Data Parkir Hari ini</h3>
+                                <table class="table table-borderless text-white">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Nama Tempat Parkir</th>
+                                            <th scope="col">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $outPC = json_decode($PC); 
+                                            foreach ($outPC as $key => $value) {
+                                                echo '
+                                                <tr>
+                                                    <td>'.$value->nama.'</td>
+                                                    <td>'.$value->count.'</td>
+                                                </tr>
+                                                ';
+                                            }
+                                        @endphp
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
