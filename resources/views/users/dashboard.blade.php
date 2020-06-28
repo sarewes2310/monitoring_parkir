@@ -267,7 +267,6 @@
         }
         console.table(chart_data2);
 
-        var MONTHS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 		var config = {
 			type: 'line',
 			data: {

@@ -1,36 +1,38 @@
 <div class="row">
     @php 
         $outTP = json_decode($TP); 
+        $outDPH = json_decode($DPH); 
         foreach ($outTP as $key => $value) {
             echo '
-                <div class="col-lg-4 bawah-operator">
-                    <div class="card shadow-sm card-grad-blue">
+            <div class="col-lg-4 bawah-operator">
+                <div class="card shadow-sm">
+                    <div style="padding: 2% 6%">
+                        <h5>Tempat Parkir</h5>
+                        <h3><b>'.$value->nama_tempat_parkir.'</b></h3>
+                    </div>
+                    <div class="card card-grad-blue">
                         <div class="card-body">
-                            <h3 class="card-title">Kendaraan Terparkir</h3>
-                            <p class="card-text">Jumlah dari pengunjung tempat parkir <b>'.$value->nama_tempat_parkir.'</b> adalah</p>
+                            <h5 class="card-title">Kendaraan Terparkir</h5>
                             <h1><b>'.count($value->parkir).'</b></h1>
                         </div>
                     </div>
+            ';
+            echo '
+                    <div class="card card-grad-red">
+                        <div class="card-body">
+                            <h5 class="card-title">Data Parkir Hari Ini</h5>
+                            <h1><b>'.count($outDPH[$key]->parkir).'</b></h1>
+                        </div>
+                    </div>
                 </div>
+            </div>
             ';
         }
     @endphp
 </div>
 <div class="row">
     @php 
-        $outDPH = json_decode($DPH); 
         foreach ($outDPH as $key => $value) {
-            echo '
-                <div class="col-lg-4 bawah-operator">
-                    <div class="card shadow-sm card-grad-red">
-                        <div class="card-body">
-                            <h3 class="card-title">Data Parkir Hari Ini</h3>
-                            <p class="card-text">Jumlah pengunjung hari ini pada tempat parkir <b>'.$value->nama_tempat_parkir.'</b> adalah</p>
-                            <h1><b>'.count($value->parkir).'</b></h1>
-                        </div>
-                    </div>
-                </div>
-            ';
         }
     @endphp
 </div>

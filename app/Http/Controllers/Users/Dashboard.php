@@ -84,8 +84,6 @@ class Dashboard extends Controller
                     'count' => count($value->parkir),
                     'nama' => $value->nama_tempat_parkir,
                 );
-            }
-            foreach ($dph as $key => $value) {
                 $line_chart[$key] = array(
                     'date_count' => $this->generateDate([$value->id]),
                     'nama' => $value->nama_tempat_parkir,
@@ -98,8 +96,6 @@ class Dashboard extends Controller
                 'dataPC' => json_encode($pie_chart),
                 'dataLC' => json_encode($line_chart),
                 #'rdp' => ParkirRepo::count(),
-                'chart_mahasiswa' => DB::table('pengguna')->join('parkir', 'pengguna.id', 'parkir.pengguna_id')->where('statuspengguna_id', 1)->whereDate('parkir.created_at', date('Y-m-d'))->count(),
-                'chart_pegawai'   => DB::table('pengguna')->join('parkir', 'pengguna.id', 'parkir.pengguna_id')->where('statuspengguna_id', 2)->whereDate('parkir.created_at', date('Y-m-d'))->count(),
             ];
         }
         return $data;
