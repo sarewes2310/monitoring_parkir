@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Custom\CheckStatus;
 
 class AlatParkir extends Controller
 {
@@ -47,6 +48,7 @@ class AlatParkir extends Controller
     {
         $data = $this->inisialisasi();
         //var_dump($data['alat_parkir']);
+        $data['dataTKI'] = CheckStatus::check();
         return $this->redirectTo($this->pathindex, $data);
     }
 
@@ -56,6 +58,7 @@ class AlatParkir extends Controller
         $data['alat_parkir'] = $this->getCariData($request->all())->paginate(15);
         //var_dump($data);
         $data += $this->cekDataKosong($data);
+        $data['dataTKI'] = CheckStatus::check();
         return $this->redirectTo($this->pathindex, $data);
     }
 

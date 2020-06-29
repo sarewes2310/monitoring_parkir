@@ -207,7 +207,7 @@
             chart_labels[index] = data[index].nama;
             if(data[index].count == 0) count_pc+=1;
         }
-        console.table(chart_data);
+        //console.table(chart_data);
         if(count_pc == data_length)
         {
             var textb = ctx.getContext("2d");
@@ -243,7 +243,7 @@
 
         var ctx2 = document.getElementById('grafikchart');
         var data2 = JSON.parse(@json($dataLC));
-        console.table(data2);
+        //console.table(data2);
         var data_length2 = data2.length;
         var chart_data2 = [];
         for (let index = 0; index < data_length2; index++) {
@@ -265,7 +265,7 @@
                 fill: false,
             };
         }
-        console.table(chart_data2);
+        //console.table(chart_data2);
 
 		var config = {
 			type: 'line',

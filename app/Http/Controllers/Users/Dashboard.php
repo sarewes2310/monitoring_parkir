@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Custom\CheckStatus;
 
 class Dashboard extends Controller
 {
@@ -31,6 +32,7 @@ class Dashboard extends Controller
     {
         $data = $this->inisialisasi();
         #return $this->generateDate([1]);
+        $data['dataTKI'] = CheckStatus::check();
         return $this->redirectTo($data);
     }
 
@@ -53,6 +55,7 @@ class Dashboard extends Controller
     protected function cari(array $datainput)
     {
         $data['admin'] = Users::where('name', 'like', '%'.$datainput['nameAdmin'].'%')->paginate(15);
+        $data['dataTKI'] = CheckStatus::check();
         return $data;
     }
 
@@ -79,6 +82,7 @@ class Dashboard extends Controller
             }])->get();
             $pie_chart = [];
             $line_chart = [];
+            $outTP = [];
             foreach ($dph as $key => $value) {
                 $pie_chart[$key] = array(
                     'count' => count($value->parkir),
@@ -103,7 +107,7 @@ class Dashboard extends Controller
 
     protected function generateDate(array $data)
     {
-        $nowdate = 6;
+        $nowdate = date('N');
         $output = [];
         if($nowdate <= 7 && $nowdate != 1)
         {    
@@ -125,12 +129,13 @@ class Dashboard extends Controller
             }
         }else if($nowdate == 1)
         {
-            for ($i=0; $i < 7 ; $i++) { 
+            for ($i=1; $i <= 7 ; $i++) { 
                 $dt = Carbon::today();
                 $output[$i] = ParkirRepo::where('tempatparkir_id', $data[0])->whereDate('created_at',
-                $dt->addDays($i)->toDateString())->count();
+                $dt->addDays($i-1)->toDateString())->count();
             }
         }
+        #var_dump($output);
         return $output;
     }
 
