@@ -24,11 +24,11 @@
                     <a href="{{ route('mahasiswa') }}" class="list-group-item list-group-item-action bg-light" id="menu_mahasiswa">Mahasiswa</a>
                     <a href="{{ route('pegawai') }}" class="list-group-item list-group-item-action bg-light" id="menu_pegawai">Pegawai</a>
                     <a href="{{ route('operator') }}" class="list-group-item list-group-item-action bg-light" id="menu_operator">Operator</a>
+                    <a href="{{ route('alat_parkir') }}" class="list-group-item list-group-item-action bg-light" id="menu_alatparkir">Alat Parkir</a>
+                    <a href="{{ route('cameraparkir') }}" class="list-group-item list-group-item-action bg-light" id="menu_camera">Camera</a>
+                    <a href="{{ route('tempatparkir') }}" class="list-group-item list-group-item-action bg-light" id="menu_parkir">Tempat Parkir</a>
                 @endif
                 <a href="{{ route('transaksi') }}" class="list-group-item list-group-item-action bg-light" id="menu_transaksi">Transaksi</a>
-                <a href="{{ route('tempatparkir') }}" class="list-group-item list-group-item-action bg-light" id="menu_parkir">Tempat Parkir</a>
-                <a href="{{ route('alat_parkir') }}" class="list-group-item list-group-item-action bg-light" id="menu_alatparkir">Alat Parkir</a>
-                <a href="{{ route('cameraparkir') }}" class="list-group-item list-group-item-action bg-light" id="menu_camera">Camera</a>
             </div>
         </div>
         <!-- /#sidebar-wrapper -->
