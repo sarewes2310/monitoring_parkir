@@ -1,5 +1,3 @@
-menu_bar_active = '#menu_transaksi';
-
 function getID(id, nama, url, tempat_parkir){
     $('#id').val(id);
     $('#namePengguna').html(nama);

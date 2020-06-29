@@ -22,7 +22,11 @@
                 @endif
 
                 <div class="tambah-data">
+                @if(Auth::user()->access_id == 2)
+                    <form class="form-inline" method="GET" action="{{ route('cariTransaksi2', $idtp) }}">
+                @else
                     <form class="form-inline" method="GET" action="{{ route('cariTransaksi') }}">
+                @endif
                         @csrf
                         <div class="form-group mx-sm-3 mb-2">
                             <input type="text" class="form-control" id="inputCari" name="inputCari" placeholder="CID Mahasiswa atau Pegawai">
@@ -122,5 +126,9 @@
 @endsection
 
 @section('custom_js')
+    <script type="text/javascript">
+        menu_bar_active = '#menu_transaksi_' + @json($idtp);
+        console.log(menu_bar_active);
+    </script>
     <script src="{{ url('js/users/custom_page_transaksi.js') }}"></script>
 @endsection

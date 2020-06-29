@@ -20,22 +20,9 @@
                     @endslot
                 @endcomponent
             @else
-                @component('users.operator_menu') 
-                    @slot('ktp')
-                        {{ $ktp }}   
-                    @endslot
-                    @slot('dph')
-                        {{ $dph }}   
-                    @endslot
-                    @slot('rdp')
-                        {{ $rdp }}   
-                    @endslot
-                    @slot('chart_mahasiswa')
-                        {{ $mahasiswa }}   
-                    @endslot
-                    @slot('chart_pegawai')
-                        {{ $chart_pegawai }}   
-                    @endslot
+                @component('users.operator_menu',['TP' => $dataTP, 
+                                                'DPH' => $dataDPH,
+                                                'PC' => $dataPC]) 
                 @endcomponent
             @endif
             
@@ -196,30 +183,131 @@
     <script src="{{ url('js/users/chart.min.js') }}"></script>    
     @if (Auth::user()->access_id == 2)
     <script>
-        var ctx = document.getElementById('myChart');
-        console.log('@json($mahasiswa)');
-        var myChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Mahasiswa', 'Pegawai'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [`{{ $mahasiswa }}`, `{{ $chart_pegawai }}`,],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+        }
+        function generateColor(length, o) {
+            output = [];
+            for (let index = 0; index < length; index++) {
+                let random_color = getRandomInt(0,256);
+                output[index] = 'rgba('+getRandomInt(0,256)+', '+getRandomInt(0,256)+', '+getRandomInt(0,256)+', '+o+')';
             }
-        });
+            return output
+        }
+        var ctx = document.getElementById('myChart');
+        var data = JSON.parse(@json($dataPC));
+        var data_length = data.length;
+        var chart_data = [];
+        var chart_labels = [];
+        var count_pc = 0;
+        for (let index = 0; index < data_length; index++) {
+            chart_data[index] = data[index].count;
+            chart_labels[index] = data[index].nama;
+            if(data[index].count == 0) count_pc+=1;
+        }
+        //console.table(chart_data);
+        if(count_pc == data_length)
+        {
+            var textb = ctx.getContext("2d");
+            textb.font = "24px Arial";
+            textb.fillText("Rekap data parkir hari ini kosong !!!", 10, 50);
+        }
+        else
+        {
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: chart_labels,
+                    datasets: [{
+                        label: 'Detail Rekap Keseluruhan Data Parkir Hari ini',
+                        data: chart_data,
+                        backgroundColor: generateColor(data_length, '0.4'),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                }
+            });
+        }
+
+        var ctx2 = document.getElementById('grafikchart');
+        var data2 = JSON.parse(@json($dataLC));
+        //console.table(data2);
+        var data_length2 = data2.length;
+        var chart_data2 = [];
+        for (let index = 0; index < data_length2; index++) {
+            //console.log(data2[index].date_count);
+            let line_color = generateColor(1, '0.4')[0];
+            chart_data2[index] = {
+                label: data2[index].nama,
+                backgroundColor: line_color,
+                borderColor: line_color,
+                data: [
+                    data2[index].date_count[1],
+                    data2[index].date_count[2],
+                    data2[index].date_count[3],
+                    data2[index].date_count[4],
+                    data2[index].date_count[5],
+                    data2[index].date_count[6],
+                    data2[index].date_count[7],
+                ],
+                fill: false,
+            };
+        }
+        //console.table(chart_data2);
+
+		var config = {
+			type: 'line',
+			data: {
+				labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
+				datasets: chart_data2
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Total Data Parkir Per-hari'
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					x: {
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Day'
+						}
+					},
+					y: {
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Jumlah'
+						}
+					}
+				}
+			}
+		};
+
+        var grafikChart = new Chart(ctx2, config);
+        
     </script>
     @endif
 @endsection

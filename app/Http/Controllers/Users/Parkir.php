@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\ParkirRepo;
+use App\Repositories\TempatParkirRepo;
 use App\Repositories\PenggunaRepo;
 use App\Repositories\AlatParkirRepo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use App\Custom\CheckStatus;
 
 class Parkir extends Controller
 {
@@ -28,12 +31,13 @@ class Parkir extends Controller
         return $data;
     }
 
-    protected function inisialisasi()
+    protected function inisialisasi($idtp)
     {
         $data['parkir'] = DB::table('parkir')
                 ->join('pengguna', 'parkir.pengguna_id', '=', 'pengguna.id')
                 ->join('tempat_parkir', 'parkir.tempatparkir_id', '=', 'tempat_parkir.id')
                 ->where('parkir.verifikasi', 0)
+                ->where('parkir.tempatparkir_id', $idtp)
                 ->select('pengguna.nama_pengguna','pengguna.nim_nip', 'parkir.verifikasi', 'parkir.id', 'tempat_parkir.nama_tempat_parkir', 'parkir.foto', 'parkir.tempatparkir_id')
                 ->paginate(15);
         //if(count($data['parkir']) > 0) $data['kosong'] = false;
@@ -55,12 +59,34 @@ class Parkir extends Controller
         return $this->redirectTo($this->pathindex, $data);
     }
 
+    public function index2($id) 
+    {
+        $data = $this->inisialisasi($id);
+        //var_dump($data['parkir']);
+        //return $data['parkir'];
+        $data['idtp'] = $id;
+        $data['dataTKI'] = CheckStatus::check();
+        #return $data['dataTKI'];
+        return $this->redirectTo($this->pathindex, $data);
+    }
+
     public function cari(Request $request)
     {
         $this->cariValidator(array('mac' => $request->all()['inputCari']))->validate();
         $data['parkir'] = $this->getCariData($request->all())->paginate(15);
         //var_dump($data);
         $data += $this->cekDataKosong($data);
+        return $this->redirectTo($this->pathindex, $data);
+    }
+
+    public function cari2(Request $request, $id)
+    {
+        $this->cariValidator(array('mac' => $request->all()['inputCari']))->validate();
+        $data['parkir'] = $this->getCariData($request->all())->paginate(15);
+        //var_dump($data);
+        $data += $this->cekDataKosong($data);
+        $data['idtp'] = $id;
+        $data['dataTKI'] = CheckStatus::check();
         return $this->redirectTo($this->pathindex, $data);
     }
 
@@ -72,6 +98,7 @@ class Parkir extends Controller
             ->join('pengguna', 'parkir.pengguna_id', '=', 'pengguna.id')
             ->join('tempat_parkir', 'parkir.tempatparkir_id', '=', 'tempat_parkir.id')
             ->where('parkir.verifikasi', 0)
+            ->where('parkir.tempatparkir_id', Auth::user()->tempat_parkir_id)
             ->where('nim_nip', 'like', ''.$data['inputCari'].'%')
             ->orWhere('cid', 'like', ''.$data['inputCari'].'%')
             ->select('pengguna.nama_pengguna','pengguna.nim_nip', 'parkir.verifikasi', 'parkir.id', 'tempat_parkir.nama_tempat_parkir', 'parkir.foto', 'parkir.tempatparkir_id');

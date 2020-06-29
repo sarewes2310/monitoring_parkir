@@ -7,7 +7,7 @@
 @endsection
 @section('content')
     <div class="container">
-        <form method="POST" action="{{ route('saveprofile') }}" class="was-validated">
+        <form method="POST" action="{{ route('saveprofile') }}" class="#">
             <div class="row justify-content-md-center">
                 <div class="col-lg-6">
                     @csrf
@@ -117,4 +117,7 @@
 @endsection
 
 @section('custom_js')
+    <script src="text/js">
+
+    </script>
 @endsection

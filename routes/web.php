@@ -90,7 +90,9 @@ Route::middleware(['auth'])->group(function(){
     
             // TAMPIL DATA
             Route::get('', 'Users\Parkir@index')->name('transaksi');
+            Route::get('index/{id}', 'Users\Parkir@index2')->name('transaksi2');
             Route::get('cari', 'Users\Parkir@cari')->name('cariTransaksi');
+            Route::get('cari/{id}', 'Users\Parkir@cari2')->name('cariTransaksi2');
             
             // TAMBAH DATA
             Route::get('tambah', 'Users\Parkir@tampilan_tambah')->name('tambah_transaksi');

@@ -8,6 +8,7 @@ use App\Repositories\TempatParkirRepo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use App\Custom\CheckStatus;
 
 class TempatParkir extends Controller
 {
@@ -41,6 +42,7 @@ class TempatParkir extends Controller
     {
         $data = $this->inisialisasi();
         //var_dump($data['tempat_parkir']);
+        $data['dataTKI'] = CheckStatus::check();
         return $this->redirectTo($this->pathindex, $data);
     }
 
@@ -50,6 +52,7 @@ class TempatParkir extends Controller
         $data['tempat_parkir'] = $this->getCariData($request->all())->paginate(15);
         //var_dump($data);
         $data += $this->cekDataKosong($data);
+        $data['dataTKI'] = CheckStatus::check();
         return $this->redirectTo($this->pathindex, $data);
     }
 
