@@ -99,6 +99,7 @@ class TempatParkir extends Controller
         $data['mode'] = $mode;
         $data['user'] = $user;
         $data['message'] = $message;
+        $data['dataTKI'] = CheckStatus::check();
         $request->session()->flash('status', $data);
         return redirect()->route($route);
     }
@@ -148,12 +149,14 @@ class TempatParkir extends Controller
     public function tampilan_tambah()
     {
         //$data = [];
-        return $this->redirectTo($this->pathtambah, []);
+        $data['dataTKI'] = CheckStatus::check();
+        return $this->redirectTo($this->pathtambah, $data);
     }
 
     public function tampilan_edit(Request $request)
     {
         $data['tempat_parkir'] = TempatParkirRepo::where('id',$request->id_tempat_parkir)->firstOrFail();
+        $data['dataTKI'] = CheckStatus::check();
         return $this->redirectTo($this->pathedit, $data);
     }
 

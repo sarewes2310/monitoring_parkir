@@ -37,6 +37,7 @@
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">No</th>
+                            <th scope="col">Nama Parkir</th>
                             <th scope="col">Tipe</th>
                             <th scope="col">IP Address</th>
                             <th scope="col">Aksi</th>
@@ -51,6 +52,7 @@
                             @foreach ($camera_parkir as $item)                            
                                 <tr>
                                     <th scope="row">{{ $loop->index + 1 }}</th>
+                                    <td>{{ $item->nama }}</td>
                                     <td>{{ $item->tipe }}</td>
                                     <td>{{ $item->ip }}</td>
                                     <td>
@@ -92,7 +94,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger " data-dismiss="modal">Tidak</button>
-                    <form action="{{ route('hapus_alat_parkir') }}" method="POST">
+                    <form action="{{ route('hapus_cameraparkir') }}" method="POST">
                         @csrf
                         <input type="text" name="idHapusData" id="idHapusData" style="display:none">
                         <input type="text" name="nameHapusData" id="nameHapusData" style="display:none">

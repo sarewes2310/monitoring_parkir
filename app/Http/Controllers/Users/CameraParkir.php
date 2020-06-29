@@ -29,7 +29,13 @@ class CameraParkir extends Controller
 
     protected function inisialisasi()
     {
-        $data['camera_parkir'] = DB::table('camera_parkir')->paginate(15);
+        $data['camera_parkir'] = DB::table('camera_parkir')
+            ->join('map_camera_parkir', 'camera_parkir.id', '=', 'map_camera_parkir.cameraparkir_id')
+            ->join('tempat_parkir', 'map_camera_parkir.tempatparkir_id', '=', 'tempat_parkir.id')
+            ->select('camera_parkir.ip as ip', 'camera_parkir.tipe as tipe', 
+                'tempat_parkir.nama_tempat_parkir as nama', 
+                'camera_parkir.id as id')
+            ->paginate(15);
         //if(count($data['camera_parkir']) > 0) $data['kosong'] = false;
         //else $data['kosong'] = true;
         $data += $this->cekDataKosong($data);
@@ -81,7 +87,7 @@ class CameraParkir extends Controller
 
     protected function tambahQuery(array $data)
     {
-        return AlatParkirRepo::create([
+        return CameraParkirRepo::create([
             'ip' => $data['ip'],
             'tipe' => $data['tipe_camera'],
         ]);
@@ -181,6 +187,7 @@ class CameraParkir extends Controller
     {
         //$data = [];
         $data['tempat_parkir'] = TempatParkirRepo::all();
+        $data['dataTKI'] = CheckStatus::check();
         //return $data;
         return $this->redirectTo($this->pathtambah, $data);
     }
@@ -194,14 +201,15 @@ class CameraParkir extends Controller
                     ->select('tempatparkir_id')
                     ->get()[0]->tempatparkir_id;
         //return $data;
+        $data['dataTKI'] = CheckStatus::check();
         return $this->redirectTo($this->pathedit, $data);
     }
 
     public function hapus(Request $request)
     {
         $reqData = $request->all();
-        if($this->hapuscamera_parkir($reqData)) return $this->notificationData(3, $request->nameHapusData, 'HAPUS', 'camera_parkir', $request);
-        else return $this->notificationData(404, $request->nameHapusData, 'HAPUS', 'camera_parkir', $request);
+        if($this->hapuscamera_parkir($reqData)) return $this->notificationData(3, $request->nameHapusData, 'HAPUS', 'cameraparkir', $request);
+        else return $this->notificationData(404, $request->nameHapusData, 'HAPUS', 'cameraparkir', $request);
     }
 
     protected function generateToken($data)
