@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="container">
-        <form method="POST" action="{{ route('simpan_tambah_alat_parkir') }}" enctype="multipart/form-data" class="was-validated">
+        <form method="POST" action="{{ route('simpan_tambah_cameraparkir') }}" enctype="multipart/form-data" class="was-validated">
             <div class="row justify-content-md-center">
                 <div class="col-lg-6">
                     @csrf
@@ -17,8 +17,8 @@
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label for="nama">IP Address Camera Parkir</label>
-                            <input type="text" class="form-control @error('mac') is-invalid @enderror" id="ip" name="ip" placeholder="IP Address dari camera parkir" required>
-                            @error('mac')
+                            <input type="text" class="form-control @error('ip') is-invalid @enderror" id="ip" name="ip" placeholder="IP Address dari camera parkir" required>
+                            @error('ip')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>

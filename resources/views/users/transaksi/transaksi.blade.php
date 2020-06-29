@@ -126,9 +126,16 @@
 @endsection
 
 @section('custom_js')
-    <script type="text/javascript">
-        menu_bar_active = '#menu_transaksi_' + @json($idtp);
-        console.log(menu_bar_active);
-    </script>
+    @if(Auth::user()->access_id == 2)
+        <script type="text/javascript">
+            menu_bar_active = '#menu_transaksi_' + @json($idtp);
+            console.log(menu_bar_active);
+        </script>
+    @else
+        <script type="text/javascript">
+            menu_bar_active = '#menu_transaksi';
+            console.log(menu_bar_active);
+        </script>
+    @endif
     <script src="{{ url('js/users/custom_page_transaksi.js') }}"></script>
 @endsection

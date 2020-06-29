@@ -189,6 +189,7 @@ class AlatParkir extends Controller
     {
         //$data = [];
         $data['tempat_parkir'] = TempatParkirRepo::all();
+        $data['dataTKI'] = CheckStatus::check();
         //return $data;
         return $this->redirectTo($this->pathtambah, $data);
     }
@@ -202,6 +203,7 @@ class AlatParkir extends Controller
                     ->select('tempatparkir_id')
                     ->get()[0]->tempatparkir_id;
         //return $data;
+        $data['dataTKI'] = CheckStatus::check();
         return $this->redirectTo($this->pathedit, $data);
     }
 

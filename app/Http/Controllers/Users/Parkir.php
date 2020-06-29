@@ -31,7 +31,21 @@ class Parkir extends Controller
         return $data;
     }
 
-    protected function inisialisasi($idtp)
+    protected function inisialisasi()
+    {
+        $data['parkir'] = DB::table('parkir')
+                ->join('pengguna', 'parkir.pengguna_id', '=', 'pengguna.id')
+                ->join('tempat_parkir', 'parkir.tempatparkir_id', '=', 'tempat_parkir.id')
+                ->where('parkir.verifikasi', 0)
+                ->select('pengguna.nama_pengguna','pengguna.nim_nip', 'parkir.verifikasi', 'parkir.id', 'tempat_parkir.nama_tempat_parkir', 'parkir.foto', 'parkir.tempatparkir_id')
+                ->paginate(15);
+        //if(count($data['parkir']) > 0) $data['kosong'] = false;
+        //else $data['kosong'] = true;
+        $data += $this->cekDataKosong($data);
+        return $data;
+    }
+
+    protected function inisialisasi2($idtp)
     {
         $data['parkir'] = DB::table('parkir')
                 ->join('pengguna', 'parkir.pengguna_id', '=', 'pengguna.id')
@@ -61,7 +75,7 @@ class Parkir extends Controller
 
     public function index2($id) 
     {
-        $data = $this->inisialisasi($id);
+        $data = $this->inisialisasi2($id);
         //var_dump($data['parkir']);
         //return $data['parkir'];
         $data['idtp'] = $id;
@@ -82,7 +96,7 @@ class Parkir extends Controller
     public function cari2(Request $request, $id)
     {
         $this->cariValidator(array('mac' => $request->all()['inputCari']))->validate();
-        $data['parkir'] = $this->getCariData($request->all())->paginate(15);
+        $data['parkir'] = $this->getCariData($request->all(), $id)->paginate(15);
         //var_dump($data);
         $data += $this->cekDataKosong($data);
         $data['idtp'] = $id;
@@ -98,7 +112,20 @@ class Parkir extends Controller
             ->join('pengguna', 'parkir.pengguna_id', '=', 'pengguna.id')
             ->join('tempat_parkir', 'parkir.tempatparkir_id', '=', 'tempat_parkir.id')
             ->where('parkir.verifikasi', 0)
-            ->where('parkir.tempatparkir_id', Auth::user()->tempat_parkir_id)
+            ->where('nim_nip', 'like', ''.$data['inputCari'].'%')
+            ->orWhere('cid', 'like', ''.$data['inputCari'].'%')
+            ->select('pengguna.nama_pengguna','pengguna.nim_nip', 'parkir.verifikasi', 'parkir.id', 'tempat_parkir.nama_tempat_parkir', 'parkir.foto', 'parkir.tempatparkir_id');
+    }
+
+    protected function getCariData2(array $data, $idtp)
+    {
+        //return $data['parkir'] = PenggunaRepo::where('nim_nip', 'like', ''.$data['inputCari'].'%')
+        //    ->orWhere('cid', 'like', ''.$data['inputCari'].'%');
+        return DB::table('parkir')
+            ->join('pengguna', 'parkir.pengguna_id', '=', 'pengguna.id')
+            ->join('tempat_parkir', 'parkir.tempatparkir_id', '=', 'tempat_parkir.id')
+            ->where('parkir.verifikasi', 0)
+            ->where('parkir.tempatparkir_id', $idtp)
             ->where('nim_nip', 'like', ''.$data['inputCari'].'%')
             ->orWhere('cid', 'like', ''.$data['inputCari'].'%')
             ->select('pengguna.nama_pengguna','pengguna.nim_nip', 'parkir.verifikasi', 'parkir.id', 'tempat_parkir.nama_tempat_parkir', 'parkir.foto', 'parkir.tempatparkir_id');

@@ -246,7 +246,6 @@ class Dashboard extends Controller
         if(is_null($data['name']) == false) $dataku['name'] = $data['name'];
         if(is_null($data['username']) == false) $dataku['username'] = $data['username'];
         if(is_null($data['notelp']) == false) $dataku['notelp'] = $data['notelp'];
-        if(is_null($data['tempatparkir_id']) == false) $dataku['tempat_parkir_id'] = $data['tempatparkir_id'];
         if($data['password'] != "") $dataku['password'] = Hash::make($data['password']);
         return Users::where('id', $data['id'])->update($dataku);
     }
