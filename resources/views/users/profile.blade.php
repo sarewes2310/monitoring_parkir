@@ -102,10 +102,6 @@
                                         <td>Input Nomer Telepon</td>
                                         <td>Berisi Nomer Telepon dari Operator.</td>
                                     </tr>
-                                    <tr id="ket_tempat_tugas">
-                                        <td>Input Posisi Tugas</td>
-                                        <td>Berisi nama tempat parkir yang dijaga oleh Operator.</td>
-                                    </tr>
                                     <tr id="ket_password">
                                         <td>Input Password</td>
                                         <td>Berisi password dari Operator.</td>
