@@ -255,7 +255,7 @@ class Dashboard extends Controller
     {
         //$reqData = Auth::user();
         $data['profile'] = Auth::user();
-        $data['tempat_parkir'] = TempatParkirRepo::all();
+        $data['dataTKI'] = CheckStatus::check();
         return view('users.profile', $data);
     }
 

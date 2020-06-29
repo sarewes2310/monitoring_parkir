@@ -47,20 +47,6 @@
                         </div>
                     </div>
 
-                    @if (Auth::user()->access_id == 2)
-                        <div class="form-row">
-                            <div class="col-md-12 mb-3">
-                                <label for="tempatparkir_id">Pilih Posisi Tugas</label>
-                                <select id="tempatparkir_id" name="tempatparkir_id" class="form-control">
-                                    <option selected>Choose...</option>
-                                    @foreach ($tempat_parkir as $item)
-                                        <option value="{{ $item->id }}" @if ($item->id == $profile->tempat_parkir_id) selected @endif>{{ $item->nama_tempat_parkir }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    @endif
-
                     <!-- INPUT PASSWORD -->
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
