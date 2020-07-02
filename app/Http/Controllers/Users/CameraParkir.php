@@ -127,6 +127,7 @@ class CameraParkir extends Controller
         $data['mode'] = $mode;
         $data['user'] = $user;
         $data['message'] = $message;
+        $data['dataTKI'] = CheckStatus::check();
         $request->session()->flash('status', $data);
         return redirect()->route($route);
     }
