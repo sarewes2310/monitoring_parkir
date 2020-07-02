@@ -23,7 +23,7 @@
 
                 <div class="tambah-data">
                 @if(Auth::user()->access_id == 2)
-                    <form class="form-inline" method="GET" action="{{ route('cariTransaksi2', $dataTKI) }}">
+                    <form class="form-inline" method="GET" action="{{ route('cariTransaksi2', $idtp) }}">
                 @else
                     <form class="form-inline" method="GET" action="{{ route('cariTransaksi') }}">
                 @endif

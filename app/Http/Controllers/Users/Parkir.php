@@ -153,12 +153,16 @@ class Parkir extends Controller
         return ParkirRepo::where('id', $data['id'])->update($dataku);
     }
 
-    protected function notificationData($mode, $user, $message, $route, Request $request)
+    protected function notificationData($mode, $user, $message, $route, Request $request, $idtp = NULL)
     {
         $data['mode'] = $mode;
         $data['user'] = $user;
         $data['message'] = $message;
         $data['dataTKI'] = CheckStatus::check();
+        if(Auth::user()->access_id == 2)
+        {
+            $data['idtp'] = $idtp;
+        }
         $request->session()->flash('status', $data);
         return redirect()->route($route);
     }
@@ -199,10 +203,10 @@ class Parkir extends Controller
             //return $this->changeModeParkir($dataReq); 
             if($this->changeModeParkir($dataReq))
             {   
-                if($this->editQuery($dataReq))return $this->notificationData(2, $request->nama_pengguna, 'buka', 'transaksi', $request);
-                else return $this->notificationData(404, $request->nama_pengguna, 'gagal dibuka', 'transaksi', $request);
+                if($this->editQuery($dataReq))return $this->notificationData(2, $request->nama_pengguna, 'buka', 'transaksi', $request, $dataReq['tempatparkir_id']);
+                else return $this->notificationData(404, $request->nama_pengguna, 'gagal dibuka', 'transaksi', $request, $dataReq['tempatparkir_id']);
             }
-            else return $this->notificationData(404, $request->nama_pengguna, 'gagal dibuka', 'transaksi', $request);
+            else return $this->notificationData(404, $request->nama_pengguna, 'gagal dibuka', 'transaksi', $request, $dataReq['tempatparkir_id']);
         }
     }
 
