@@ -159,12 +159,9 @@ class Parkir extends Controller
         $data['user'] = $user;
         $data['message'] = $message;
         $data['dataTKI'] = CheckStatus::check();
-        if(Auth::user()->access_id == 2)
-        {
-            $data['idtp'] = $idtp;
-        }
+        $data['idtp'] = $idtp;
         $request->session()->flash('status', $data);
-        return redirect()->route($route);
+        return redirect()->route($route, ['id' => $idtp]);
     }
     
 
@@ -201,12 +198,14 @@ class Parkir extends Controller
             $dataReq = $request->all();
             $dataReq['verifikasi'] = 1;
             //return $this->changeModeParkir($dataReq); 
+            if(Auth::user()->access_id == 2) $link = 'transaksi2';
+            else $link = 'transaksi';
             if($this->changeModeParkir($dataReq))
             {   
-                if($this->editQuery($dataReq))return $this->notificationData(2, $request->nama_pengguna, 'buka', 'transaksi', $request, $dataReq['tempatparkir_id']);
-                else return $this->notificationData(404, $request->nama_pengguna, 'gagal dibuka', 'transaksi', $request, $dataReq['tempatparkir_id']);
+                if($this->editQuery($dataReq))return $this->notificationData(2, $request->nama_pengguna, 'buka', $link, $request, $dataReq['tempatparkir_id']);
+                else return $this->notificationData(404, $request->nama_pengguna, 'gagal dibuka', $link, $request, $dataReq['tempatparkir_id']);
             }
-            else return $this->notificationData(404, $request->nama_pengguna, 'gagal dibuka', 'transaksi', $request, $dataReq['tempatparkir_id']);
+            else return $this->notificationData(404, $request->nama_pengguna, 'gagal dibuka', $link, $request, $dataReq['tempatparkir_id']);
         }
     }
 
