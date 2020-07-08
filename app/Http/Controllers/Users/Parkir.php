@@ -37,7 +37,9 @@ class Parkir extends Controller
                 ->join('pengguna', 'parkir.pengguna_id', '=', 'pengguna.id')
                 ->join('tempat_parkir', 'parkir.tempatparkir_id', '=', 'tempat_parkir.id')
                 ->where('parkir.verifikasi', 0)
-                ->select('pengguna.nama_pengguna','pengguna.nim_nip', 'parkir.verifikasi', 'parkir.id', 'tempat_parkir.nama_tempat_parkir', 'parkir.foto', 'parkir.tempatparkir_id')
+                ->select('pengguna.nama_pengguna','pengguna.nim_nip', 'parkir.verifikasi', 'parkir.id', 
+                'tempat_parkir.nama_tempat_parkir', 'parkir.foto', 'parkir.tempatparkir_id',
+                'parkir.created_at as waktu')
                 ->paginate(15);
         //if(count($data['parkir']) > 0) $data['kosong'] = false;
         //else $data['kosong'] = true;
@@ -52,7 +54,9 @@ class Parkir extends Controller
                 ->join('tempat_parkir', 'parkir.tempatparkir_id', '=', 'tempat_parkir.id')
                 ->where('parkir.verifikasi', 0)
                 ->where('parkir.tempatparkir_id', $idtp)
-                ->select('pengguna.nama_pengguna','pengguna.nim_nip', 'parkir.verifikasi', 'parkir.id', 'tempat_parkir.nama_tempat_parkir', 'parkir.foto', 'parkir.tempatparkir_id')
+                ->select('pengguna.nama_pengguna','pengguna.nim_nip', 'parkir.verifikasi', 'parkir.id', 
+                    'tempat_parkir.nama_tempat_parkir', 'parkir.foto', 'parkir.tempatparkir_id',
+                    'parkir.created_at as waktu')
                 ->paginate(15);
         //if(count($data['parkir']) > 0) $data['kosong'] = false;
         //else $data['kosong'] = true;

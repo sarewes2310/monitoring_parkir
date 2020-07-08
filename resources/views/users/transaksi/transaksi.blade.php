@@ -41,6 +41,7 @@
                             <th scope="col">Nama</th>
                             <th scope="col">Nim / NIP</th>
                             <th scope="col">Tempat Parkir</th>
+                            <th scope="col">Waktu</th>
                             <th scope="col">Verifikasi</th>
                             <th scope="col">Aksi</th>
                         </tr>
@@ -57,6 +58,7 @@
                                     <td>{{ $item->nama_pengguna }}</td>
                                     <td>{{ $item->nim_nip }}</td>
                                     <td>{{ $item->nama_tempat_parkir }}</td>
+                                    <td>{{ $item->waktu }}</td>
                                     <td>
                                         @if ($item->verifikasi == 0)
                                             <div class="badge badge-success text-wrap mon-f-badge">
